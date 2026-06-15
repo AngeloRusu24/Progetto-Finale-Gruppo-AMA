@@ -1,44 +1,88 @@
 <div class="page">
-
+  <!-- NAVBAR: barra di navigazione in cima alla pagina -->
   <nav class="navbar">
-    <span class="logo">🍳 RecipeBox</span>
+    <!-- Logo dell'app con emoji e nome -->
+    <span class="logo">🍳 La Ricetta perfetta</span>
+    <!-- Link di navigazione a destra -->
     <div class="nav-links">
       <a class="nav-link" href="#">Esplora</a>
       <a class="nav-link" href="#">Ricette</a>
       <a class="nav-link" href="#">Profilo</a>
+      <!-- Bottone di accesso evidenziato -->
       <button class="btn-primary">Accedi</button>
     </div>
   </nav>
 
+  <!-- HERO: sezione centrale di benvenuto -->
   <div class="hero">
-    <p class="hero-tag">Condividi la tua cucina</p>
+    <!-- Piccola etichetta sopra il titolo -->
+    <p class="hero-tag">Condividi la tua cucina e le tue ricette!</p>
+    <!-- Titolo principale della pagina -->
     <h1 class="hero-title">Scopri e condividi ricette con il mondo</h1>
-    <p class="hero-sub">Trova ispirazione, salva le tue preferite e condividi le ricette di casa tua.</p>
+    <!-- Sottotitolo descrittivo -->
+    <p class="hero-sub">
+      Trova ispirazione, salva le tue preferite e condividi le ricette di casa tua.
+    </p>
+    <!-- Barra di ricerca -->
     <div class="search-bar">
       <span class="search-icon">🔍</span>
       <input type="text" placeholder="Cerca una ricetta..." />
     </div>
   </div>
 
+  <!-- CATEGORIE: due righe di filtri cliccabili -->
   <div class="categories">
-    <span
-      class="chip"
-      *ngFor="let cat of categories"
-      [class.active]="selectedCategory === cat"
-      (click)="selectCategory(cat)">
-      {{ cat }}
-    </span>
+    <!-- Prima riga: filtro per portata -->
+    <!--
+      *ngFor: cicla sull'array "portate" definito nel .ts
+      [class.active]: aggiunge la classe "active" se la portata è quella selezionata
+      (click): al click chiama selectPortata() nel .ts, cliccando di nuovo deseleziona
+    -->
+    <div class="category-row">
+      <span
+        class="chip"
+        *ngFor="let cat of portate"
+        [class.active]="selectedPortata === cat"
+        (click)="selectPortata(cat)">
+        {{ cat }}
+      </span>
+    </div>
+
+    <!-- Seconda riga: filtro per ingrediente principale -->
+    <!--
+      *ngFor: cicla sull'array "ingredienti" definito nel .ts
+      [class.active]: aggiunge la classe "active" se l'ingrediente è quello selezionato
+      (click): al click chiama selectIngrediente() nel .ts, cliccando di nuovo deseleziona
+    -->
+    <div class="category-row">
+      <span
+        class="chip"
+        *ngFor="let ing of ingredienti"
+        [class.active]="selectedIngrediente === ing"
+        (click)="selectIngrediente(ing)">
+        {{ ing }}
+      </span>
+    </div>
   </div>
 
+  <!-- TITOLO SEZIONE ricette -->
   <p class="section-title">Ricette popolari</p>
 
+  <!-- CARDS: griglia di ricette -->
   <div class="cards">
+    <!--
+      *ngFor: cicla sull'array "recipes" definito nel .ts
+      Ogni card mostra emoji, titolo, autore e categoria della ricetta
+    -->
     <div class="card" *ngFor="let recipe of recipes">
+      <!-- Immagine/emoji della ricetta con sfondo colorato dinamico -->
       <div class="card-img" [style.background]="recipe.bg">
         {{ recipe.emoji }}
       </div>
+      <!-- Corpo della card con titolo e metadati -->
       <div class="card-body">
         <p class="card-title">{{ recipe.title }}</p>
+        <!-- Riga inferiore: autore a sinistra, categoria a destra -->
         <div class="card-meta">
           <span>da {{ recipe.author }}</span>
           <span class="badge">{{ recipe.category }}</span>
@@ -46,5 +90,4 @@
       </div>
     </div>
   </div>
-
 </div>
