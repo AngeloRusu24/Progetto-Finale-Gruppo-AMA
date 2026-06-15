@@ -1,1 +1,50 @@
-<p>home works!</p>
+<div class="page">
+
+  <nav class="navbar">
+    <span class="logo">🍳 RecipeBox</span>
+    <div class="nav-links">
+      <a class="nav-link" href="#">Esplora</a>
+      <a class="nav-link" href="#">Ricette</a>
+      <a class="nav-link" href="#">Profilo</a>
+      <button class="btn-primary">Accedi</button>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <p class="hero-tag">Condividi la tua cucina</p>
+    <h1 class="hero-title">Scopri e condividi ricette con il mondo</h1>
+    <p class="hero-sub">Trova ispirazione, salva le tue preferite e condividi le ricette di casa tua.</p>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Cerca una ricetta..." />
+    </div>
+  </div>
+
+  <div class="categories">
+    <span
+      class="chip"
+      *ngFor="let cat of categories"
+      [class.active]="selectedCategory === cat"
+      (click)="selectCategory(cat)">
+      {{ cat }}
+    </span>
+  </div>
+
+  <p class="section-title">Ricette popolari</p>
+
+  <div class="cards">
+    <div class="card" *ngFor="let recipe of recipes">
+      <div class="card-img" [style.background]="recipe.bg">
+        {{ recipe.emoji }}
+      </div>
+      <div class="card-body">
+        <p class="card-title">{{ recipe.title }}</p>
+        <div class="card-meta">
+          <span>da {{ recipe.author }}</span>
+          <span class="badge">{{ recipe.category }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
