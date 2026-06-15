@@ -9,16 +9,23 @@ import { CommonModule } from '@angular/common';
   styleUrl: './home.css'
 })
 export class HomeComponent {
-  categories = ['Tutti', 'Pasta', 'Dolci', 'Vegano', 'Carne', 'Pesce'];
-  selectedCategory = 'Tutti';
+  portate = ['Antipasti', 'Primi', 'Secondi', 'Dolci'];
+  ingredienti = ['Pasta', 'Carne', 'Pesce', 'Vegano'];
+
+  selectedPortata = '';
+  selectedIngrediente = '';
 
   recipes = [
-    { title: 'Spaghetti alla Carbonara', author: 'Marco R.', category: 'Pasta', emoji: '🍝', bg: '#FFF3EC' },
-    { title: 'Insalata Greca', author: 'Sofia L.', category: 'Vegano', emoji: '🥗', bg: '#F1F8EC' },
-    { title: 'Tiramisù Classico', author: 'Giulia B.', category: 'Dolci', emoji: '🍮', bg: '#FFF8EC' },
+    { title: 'Spaghetti alla Carbonara', author: 'Marco R.', category: 'Primi', ingrediente: 'Pasta', emoji: '🍝', bg: '#FFF3EC' },
+    { title: 'Insalata Greca', author: 'Sofia L.', category: 'Secondi', ingrediente: 'Vegano', emoji: '🥗', bg: '#F1F8EC' },
+    { title: 'Tiramisù Classico', author: 'Giulia B.', category: 'Dolci', ingrediente: '', emoji: '🍮', bg: '#FFF8EC' },
   ];
 
-  selectCategory(cat: string) {
-    this.selectedCategory = cat;
+  selectPortata(cat: string) {
+    this.selectedPortata = this.selectedPortata === cat ? '' : cat;
+  }
+
+  selectIngrediente(ing: string) {
+    this.selectedIngrediente = this.selectedIngrediente === ing ? '' : ing;
   }
 }
