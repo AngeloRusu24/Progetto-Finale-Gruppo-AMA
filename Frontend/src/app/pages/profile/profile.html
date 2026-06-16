@@ -1,1 +1,69 @@
-<p>profile works!</p>
+<div class="profile-page">
+
+  <!-- HEADER PROFILO -->
+  <div class="profile-header">
+
+    <div class="avatar">👤</div>
+
+    <div class="user-info">
+      <h2>{{ user.username }}</h2>
+      <p>{{ user.email }}</p>
+      <span>Iscritto da {{ user.createdAt }}</span>
+    </div>
+
+  </div>
+
+  <!-- MIGLIORI RICETTE -->
+  <section class="section">
+    <h3>⭐ Le mie migliori ricette</h3>
+
+    <div class="best-recipes">
+
+      <div class="mini-card" *ngFor="let r of bestRecipes">
+        <p class="title">{{ r.title }}</p>
+        <span>⭐ {{ r.rating }}</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LE MIE RICETTE -->
+  <section class="section">
+    <h3>🍝 Le mie ricette</h3>
+
+    <div class="recipes-list">
+
+      <div class="recipe-card" *ngFor="let r of myRecipes">
+
+        <div class="recipe-main">
+          <h4>{{ r.title }}</h4>
+          <p>{{ r.category }}</p>
+        </div>
+
+        <div class="recipe-meta">
+          <span>⏱️ {{ r.time }} min</span>
+          <span>🔥 {{ r.difficulty }}</span>
+          <span>⭐ {{ r.rating }}</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- COMMENTI -->
+  <section class="section">
+    <h3>💬 Commenti ricevuti</h3>
+
+    <div class="comments">
+
+      <div class="comment" *ngFor="let c of comments">
+        <p class="comment-user">{{ c.user }}</p>
+        <p class="comment-text"> Su: <b> "{{ c.recipeTitle }}"</b> - "{{ c.text }}""</p>
+        <span>⭐ {{ c.rating }}</span>
+      </div>
+
+    </div>
+  </section>
+
+</div>
