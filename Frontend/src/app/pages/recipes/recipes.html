@@ -1,1 +1,56 @@
-<p>recipes works!</p>
+<div class="recipes-page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Le Ricette</h1>
+    <p>Scopri e filtra le ricette per categoria</p>
+
+    <button class="add-btn">+ Aggiungi Ricetta</button>
+  </div>
+
+  <!-- FILTRI TAG -->
+  <div class="filters">
+
+    <span
+      class="chip"
+      *ngFor="let tag of tags"
+      [class.active]="selectedTags.includes(tag)"
+      (click)="toggleTag(tag)">
+      {{ tag }}
+    </span>
+
+  </div>
+
+  <!-- LISTA RICETTE -->
+  <div class="grid">
+
+    <div class="card" *ngFor="let r of filteredRecipes">
+
+      <!-- immagine -->
+      <div class="img">
+        {{ r.image }}
+      </div>
+
+      <!-- contenuto -->
+      <div class="content">
+
+        <h3>{{ r.title }}</h3>
+
+        <p class="meta">
+          ⏱️ {{ r.time }} min • 🔥 {{ r.difficulty }}
+        </p>
+
+        <!-- TAG RICETTA -->
+        <div class="tags">
+          <span *ngFor="let t of r.tags">
+            {{ t }}
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
