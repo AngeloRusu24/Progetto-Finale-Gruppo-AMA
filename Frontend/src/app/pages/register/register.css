@@ -146,6 +146,7 @@ button:hover {
   text-align: center;
   font-size: 13px;
   color: #888780;
+  cursor: pointer;
 }
 
 .login-link a {

@@ -32,6 +32,18 @@ export class Register {
     return;
   }
 
+  const userData = {
+      name: this.registerForm.value.name,
+      surname: this.registerForm.value.surname,
+      birthDate: this.registerForm.value.birthDate,
+      email: this.registerForm.value.email,
+      password: this.registerForm.value.password
+    };
+
+    console.log('Dati registrazione:', userData);
+
+    alert('Registrazione completata!');
+
   this.registerForm.reset();
   }
 
