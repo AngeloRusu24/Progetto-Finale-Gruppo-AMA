@@ -97,6 +97,11 @@ button:hover {
   background: #993C1D;
 }
 
+button:disabled{
+  background: #c7c7c7;
+  cursor: not-allowed;
+}
+
 /* LINK REGISTER */
 .register-link {
   margin-top: 1rem;

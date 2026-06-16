@@ -32,7 +32,7 @@
 .register-header .title {
   font-size: 28px;
   font-weight: 500;
-  color: #2C2C2A;
+  color: #D85A30;
   letter-spacing: 1px;
 }
 
@@ -66,11 +66,14 @@
   color: #D85A30;
 }
 
+
 /* TITOLO */
 .title-section {
   text-align: center;
   margin-bottom: 1.5rem;
 }
+
+
 
 .title-section h2 {
   font-size: 18px;
@@ -138,6 +141,11 @@ button {
 
 button:hover {
   background: #993C1D;
+}
+
+button:disabled {
+  background: #c7c7c7;
+  cursor: not-allowed;
 }
 
 /* LINK LOGIN */
