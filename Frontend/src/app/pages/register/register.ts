@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import { NgIf } from "@angular/common"
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [NgIf, ReactiveFormsModule],
+  imports: [NgIf, ReactiveFormsModule, RouterLink],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
