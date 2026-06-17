@@ -5,8 +5,82 @@
   padding: 0;
 }
 
-.form-container {
+/* PAGE WRAPPER */
+.page {
+  background: #FFFDF9;
   min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* =========================
+   NAVBAR (dalla home)
+========================= */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 0.5px solid #E8DDD0;
+  background: #FFFDF9;
+}
+
+/* .logo {
+  font-size: 20px;
+  font-weight: 500;
+  color: #D85A30;
+} */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #D85A30;
+}
+
+.logo-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-link {
+  font-size: 14px;
+  color: #888780;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: #D85A30;
+}
+
+.btn-primary {
+  background: #D85A30;
+  color: #FFFDF9;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-primary:hover {
+  background: #993C1D;
+}
+
+/* =========================
+   LOGIN CONTAINER
+========================= */
+.form-container {
+  min-height: calc(100vh - 70px);
   background: #FFFDF9;
   display: flex;
   flex-direction: column;
@@ -15,6 +89,7 @@
   padding: 2rem;
 }
 
+/* FORM CARD */
 form {
   width: 100%;
   max-width: 420px;
@@ -27,17 +102,16 @@ form {
   flex-direction: column;
   gap: 14px;
 
-
   box-shadow: 0 8px 20px rgba(0,0,0,0.03);
 }
 
-/* HEADER sopra la card */
+/* HEADER LOGIN */
 .login-header {
   text-align: center;
   margin-bottom: 1.5rem;
 }
 
-.logo {
+.login-header .logo {
   font-size: 28px;
   font-weight: 500;
   color: #D85A30;
@@ -68,6 +142,7 @@ input {
   font-size: 14px;
   outline: none;
   background: #fff;
+  transition: 0.2s;
 }
 
 input:focus {
@@ -80,7 +155,7 @@ small {
   color: #D85A30;
 }
 
-/* BUTTON */
+/* BUTTON LOGIN */
 button {
   margin-top: 10px;
   background: #D85A30;
@@ -97,12 +172,12 @@ button:hover {
   background: #993C1D;
 }
 
-button:disabled{
+button:disabled {
   background: #c7c7c7;
   cursor: not-allowed;
 }
 
-/* LINK REGISTER */
+/* REGISTER LINK */
 .register-link {
   margin-top: 1rem;
   text-align: center;
@@ -113,7 +188,7 @@ button:disabled{
 .register-link a {
   color: #D85A30;
   text-decoration: none;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .register-link a:hover {
