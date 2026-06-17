@@ -30,6 +30,19 @@
   cursor: pointer;
 }
 
+.logo-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #D85A30;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
 /* .logo {
   display: flex;
   align-items: center;
