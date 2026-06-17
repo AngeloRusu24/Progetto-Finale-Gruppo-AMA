@@ -10,6 +10,7 @@
   font-family: 'Inter', sans-serif;
 }
 
+/* NAVBAR */
 .navbar {
   display: flex;
   align-items: center;
@@ -55,6 +56,7 @@
   background: #993C1D;
 }
 
+/* HERO */
 .hero {
   padding: 4rem 2rem 3rem;
   text-align: center;
@@ -85,6 +87,7 @@
   margin-bottom: 2rem;
 }
 
+/* SEARCH BAR */
 .search-bar {
   display: flex;
   align-items: center;
@@ -110,11 +113,18 @@
   color: #B4B2A9;
 }
 
+/* FILTRI */
 .categories {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 1.5rem 2rem;
+}
+
+.category-row {
   display: flex;
   justify-content: center;
   gap: 8px;
-  padding: 1.5rem 2rem;
   flex-wrap: wrap;
 }
 
@@ -135,6 +145,14 @@
   color: #993C1D;
 }
 
+/* SEZIONE RICETTE */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #888780;
+  font-size: 14px;
+}
+
 .section-title {
   font-size: 18px;
   font-weight: 500;
@@ -142,6 +160,7 @@
   padding: 0 2rem 1rem;
 }
 
+/* CARDS */
 .cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -154,6 +173,13 @@
   border-radius: 12px;
   border: 0.5px solid #E8DDD0;
   overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
 }
 
 .card-img {
@@ -162,6 +188,7 @@
   align-items: center;
   justify-content: center;
   font-size: 40px;
+  background: #FFF3EC;
 }
 
 .card-body {
@@ -172,7 +199,7 @@
   font-size: 14px;
   font-weight: 500;
   color: #2C2C2A;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .card-meta {
@@ -189,4 +216,24 @@
   color: #993C1D;
   padding: 2px 8px;
   border-radius: 999px;
+}
+
+.card-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.rating-count {
+  color: #B4B2A9;
+}
+
+.empty {
+  font-size: 14px;
+  color: #B4B2A9;
+  grid-column: span 3;
+  text-align: center;
+  padding: 2rem 0;
 }

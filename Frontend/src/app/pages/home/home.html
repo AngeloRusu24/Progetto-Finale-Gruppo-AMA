@@ -1,8 +1,9 @@
 <div class="page">
+
   <!-- NAVBAR: barra di navigazione in cima alla pagina -->
   <nav class="navbar">
     <!-- Logo dell'app con emoji e nome -->
-    <span class="logo">🍳 La Ricetta perfetta</span>
+    <span class="logo">🍳 La Ricetta Perfetta</span>
     <!-- Link di navigazione a destra -->
     <div class="nav-links">
       <a class="nav-link" href="#">Esplora</a>
@@ -23,20 +24,21 @@
     <p class="hero-sub">
       Trova ispirazione, salva le tue preferite e condividi le ricette di casa tua.
     </p>
-    <!-- Barra di ricerca -->
+    <!-- Barra di ricerca per username -->
     <div class="search-bar">
       <span class="search-icon">🔍</span>
-      <input type="text" placeholder="Cerca una ricetta..." />
+      <input type="text" placeholder="Cerca uno chef..." (input)="onSearchUsername($event)" />
     </div>
   </div>
 
-  <!-- CATEGORIE: due righe di filtri cliccabili -->
+  <!-- FILTRI: due righe di chip cliccabili -->
   <div class="categories">
+
     <!-- Prima riga: filtro per portata -->
     <!--
       *ngFor: cicla sull'array "portate" definito nel .ts
       [class.active]: aggiunge la classe "active" se la portata è quella selezionata
-      (click): al click chiama selectPortata() nel .ts, cliccando di nuovo deseleziona
+      (click): al click chiama selectPortata(), cliccando di nuovo deseleziona
     -->
     <div class="category-row">
       <span
@@ -52,7 +54,7 @@
     <!--
       *ngFor: cicla sull'array "ingredienti" definito nel .ts
       [class.active]: aggiunge la classe "active" se l'ingrediente è quello selezionato
-      (click): al click chiama selectIngrediente() nel .ts, cliccando di nuovo deseleziona
+      (click): al click chiama selectIngrediente(), cliccando di nuovo deseleziona
     -->
     <div class="category-row">
       <span
@@ -63,31 +65,51 @@
         {{ ing }}
       </span>
     </div>
+
   </div>
+
+  <!-- STATO DI CARICAMENTO -->
+  <p class="loading" *ngIf="loading">Caricamento ricette...</p>
 
   <!-- TITOLO SEZIONE ricette -->
-  <p class="section-title">Ricette popolari</p>
+  <p class="section-title" *ngIf="!loading">Ricette popolari</p>
 
   <!-- CARDS: griglia di ricette -->
-  <div class="cards">
+  <div class="cards" *ngIf="!loading">
+
     <!--
-      *ngFor: cicla sull'array "recipes" definito nel .ts
-      Ogni card mostra emoji, titolo, autore e categoria della ricetta
+      *ngFor: cicla sull'array "recipes" caricato dall'API
+      [routerLink]: al click naviga alla pagina di dettaglio della ricetta
     -->
-    <div class="card" *ngFor="let recipe of recipes">
-      <!-- Immagine/emoji della ricetta con sfondo colorato dinamico -->
-      <div class="card-img" [style.background]="recipe.bg">
+    <div class="card" *ngFor="let recipe of recipes" [routerLink]="['/recipe', recipe.id]">
+
+      <!-- Emoji della ricetta con sfondo caldo -->
+      <div class="card-img">
         {{ recipe.emoji }}
       </div>
-      <!-- Corpo della card con titolo e metadati -->
+
+      <!-- Corpo della card -->
       <div class="card-body">
         <p class="card-title">{{ recipe.title }}</p>
-        <!-- Riga inferiore: autore a sinistra, categoria a destra -->
+
+        <!-- Autore a sinistra, categoria a destra -->
         <div class="card-meta">
-          <span>da {{ recipe.author }}</span>
+          <span>da {{ recipe.username }}</span>
           <span class="badge">{{ recipe.category }}</span>
         </div>
+
+        <!-- Valutazione media, mostrata solo se ci sono recensioni -->
+        <div class="card-rating" *ngIf="recipe.review_count > 0">
+          <span>{{ getStars(recipe.avg_rating) }}</span>
+          <span class="rating-count">({{ recipe.review_count }})</span>
+        </div>
+
       </div>
     </div>
+
+    <!-- Messaggio se non ci sono ricette -->
+    <p class="empty" *ngIf="recipes.length === 0">Nessuna ricetta trovata.</p>
+
   </div>
+
 </div>
