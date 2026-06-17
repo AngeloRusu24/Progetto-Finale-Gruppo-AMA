@@ -1,0 +1,127 @@
+<div class="page">
+
+  <nav class="navbar">
+    <span class="logo" (click)="onCancel()">🍳 La Ricetta perfetta</span>
+    <div class="nav-links">
+      <a class="nav-link" href="#">Esplora</a>
+      <a class="nav-link" href="#">Ricette</a>
+      <a class="nav-link" href="#">Profilo</a>
+      <button class="btn-primary">Accedi</button>
+    </div>
+  </nav>
+
+  <div class="content">
+
+    <a class="back-link" (click)="onCancel()">← Torna alle ricette</a>
+
+    <h1 class="page-title">Aggiungi una ricetta</h1>
+
+    <!-- INFO BASE -->
+    <div class="form-section">
+      <p class="form-section-title">Informazioni base</p>
+
+      <div class="field">
+        <label class="label" for="title">Titolo ricetta</label>
+        <input
+          id="title"
+          class="input"
+          type="text"
+          placeholder="Es. Spaghetti alla Carbonara"
+          [(ngModel)]="form.title"
+          name="title" />
+      </div>
+
+      <div class="field">
+        <label class="label" for="description">Descrizione</label>
+        <textarea
+          id="description"
+          class="input"
+          placeholder="Racconta brevemente la tua ricetta..."
+          [(ngModel)]="form.description"
+          name="description">
+        </textarea>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label class="label" for="time">Tempo (minuti)</label>
+          <input
+            id="time"
+            class="input"
+            type="number"
+            placeholder="30"
+            [(ngModel)]="form.time"
+            name="time"
+            min="1" />
+        </div>
+        <div class="field">
+          <label class="label" for="difficulty">Difficoltà</label>
+          <select
+            id="difficulty"
+            class="input"
+            [(ngModel)]="form.difficulty"
+            name="difficulty">
+            <option>Facile</option>
+            <option>Media</option>
+            <option>Difficile</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATEGORIE -->
+    <div class="form-section">
+      <p class="form-section-title">Categorie</p>
+      <div class="chips-wrap">
+        <span
+          class="chip"
+          *ngFor="let tag of availableTags"
+          [class.active]="form.tags.includes(tag)"
+          (click)="toggleTag(tag)">
+          {{ tag }}
+        </span>
+      </div>
+      <p class="field-hint" *ngIf="form.tags.length === 0">Seleziona almeno una categoria.</p>
+    </div>
+
+    <!-- INGREDIENTI E PROCEDIMENTO -->
+    <div class="form-section">
+      <p class="form-section-title">Ingredienti e procedimento</p>
+
+      <div class="field">
+        <label class="label" for="ingredients">Ingredienti</label>
+        <textarea
+          id="ingredients"
+          class="input"
+          placeholder="Un ingrediente per riga&#10;Es. 200g pasta&#10;2 uova&#10;100g guanciale"
+          [(ngModel)]="form.ingredients"
+          name="ingredients">
+        </textarea>
+      </div>
+
+      <div class="field">
+        <label class="label" for="steps">Procedimento</label>
+        <textarea
+          id="steps"
+          class="input input--tall"
+          placeholder="Descrivi i passaggi della ricetta..."
+          [(ngModel)]="form.steps"
+          name="steps">
+        </textarea>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="form-footer">
+      <button class="btn-cancel" (click)="onCancel()">Annulla</button>
+      <button
+        class="btn-submit"
+        (click)="onSubmit()"
+        [disabled]="!isValid"
+        [class.disabled]="!isValid">
+        Pubblica ricetta
+      </button>
+    </div>
+
+  </div>
+</div>

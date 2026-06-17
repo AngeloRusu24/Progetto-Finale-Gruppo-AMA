@@ -10,48 +10,44 @@ import { CommonModule } from '@angular/common';
 })
 export class ProfileComponent {
 
-  // dati utente (mock per ora, poi arriveranno dal backend)
+  // Dati utente (mock — poi arriveranno dal backend)
   user = {
-    username: 'Maria',
+    name: 'Maria Rossi',
+    initials: 'MR',
     email: 'maria@email.com',
-    createdAt: 'Gennaio 2025'
+    createdAt: 'gennaio 2025'
   };
 
-  // ricette dell’utente
+  // Tutte le ricette dell'utente
   myRecipes = [
-    {
-      title: 'Carbonara',
-      category: 'Primi',
-      time: 20,
-      difficulty: 'Media',
-      rating: 4.8
-    },
-    {
-      title: 'Tiramisù',
-      category: 'Dolci',
-      time: 40,
-      difficulty: 'Facile',
-      rating: 4.9
-    },
-    {
-      title: 'Pollo al forno',
-      category: 'Secondi',
-      time: 60,
-      difficulty: 'Media',
-      rating: 4.5
-    }
+    { title: 'Carbonara',      emoji: '🍝', category: 'Primi',   time: 20, difficulty: 'Media',  rating: 4.8 },
+    { title: 'Tiramisù',       emoji: '🍮', category: 'Dolci',   time: 40, difficulty: 'Facile', rating: 4.9 },
+    { title: 'Pollo al forno', emoji: '🍗', category: 'Secondi', time: 60, difficulty: 'Media',  rating: 4.5 },
   ];
 
-  // migliori ricette (per ora prese manualmente)
-  bestRecipes = [
-    this.myRecipes[1],
-    this.myRecipes[0]
-  ];
+  // Migliori ricette (ordinate per rating)
+  get bestRecipes() {
+    return [...this.myRecipes]
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, 2);
+  }
 
-  // 💬 commenti ricevuti
+  // Statistiche calcolate
+  get avgRating(): string {
+    const avg = this.myRecipes.reduce((sum, r) => sum + r.rating, 0) / this.myRecipes.length;
+    return avg.toFixed(1);
+  }
+
+  // Commenti ricevuti
   comments = [
-    { user: 'Marco', text: 'Ricetta fantastica!', rating: 5, recipeTitle: "Carbonara" },
-    { user: 'Anna', text: 'Molto facile da seguire', rating: 4, recipeTitle: "Tiramisù" },
-    { user: 'Luca', text: 'Ottimo risultato!', rating: 5, recipeTitle: "Tiramisù" }
+    { initials: 'MA', user: 'Marco', recipeTitle: 'Carbonara',      text: 'Ricetta fantastica!',          rating: 5 },
+    { initials: 'AN', user: 'Anna',  recipeTitle: 'Tiramisù',        text: 'Molto facile da seguire.',     rating: 4 },
+    { initials: 'LU', user: 'Luca',  recipeTitle: 'Tiramisù',        text: 'Ottimo risultato!',            rating: 5 },
   ];
+
+  // Genera stringa di stelle (es. 4 → "★★★★☆")
+  getStars(rating: number): string {
+    const full = Math.round(rating);
+    return '★'.repeat(full) + '☆'.repeat(5 - full);
+  }
 }

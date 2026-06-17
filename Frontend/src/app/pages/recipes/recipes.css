@@ -1,190 +1,258 @@
-/* PAGINA */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-.recipes-page {
-  min-height: 100vh;
+/* ─── PAGINA ─────────────────────────────────── */
+
+.page {
   background: #FFFDF9;
-  padding: 2rem;
+  min-height: 100vh;
   font-family: 'Inter', sans-serif;
 }
 
-/* HEADER */
+/* ─── NAVBAR ─────────────────────────────────── */
 
-.header {
-  text-align: center;
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 0.5px solid #E8DDD0;
+  background: #FFFDF9;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 500;
+  color: #D85A30;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-link {
+  font-size: 14px;
+  color: #888780;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-link:hover,
+.nav-link--active {
+  color: #D85A30;
+}
+
+.btn-primary {
+  background: #D85A30;
+  color: #FFFDF9;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: #993C1D;
+}
+
+/* ─── LAYOUT ─────────────────────────────────── */
+
+.content {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
+}
+
+/* ─── PAGE HEADER ────────────────────────────── */
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
   margin-bottom: 2rem;
 }
 
-.header h1 {
+.page-eyebrow {
+  font-size: 11px;
+  color: #D85A30;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 500;
   color: #2C2C2A;
-  margin-bottom: 0.5rem;
-  font-size: 2rem;
 }
 
-.header p {
-  color: #777;
-  margin-bottom: 1rem;
-}
-
-/* BOTTONE */
-
-.add-btn {
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   background: #D85A30;
-  color: white;
-
+  color: #FFFDF9;
   border: none;
-  border-radius: 10px;
-
-  padding: 10px 18px;
-
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-
-  transition: 0.2s;
+  transition: background 0.2s;
 }
 
-.add-btn:hover {
-  background: #c34e27;
-  transform: translateY(-2px);
+.btn-add:hover {
+  background: #993C1D;
 }
 
-/* FILTRI */
+/* ─── FILTRI ─────────────────────────────────── */
 
 .filters {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-
-  gap: 10px;
-
-  margin-bottom: 2rem;
+  gap: 8px;
+  margin-bottom: 1.25rem;
 }
 
 .chip {
-  padding: 8px 16px;
-
+  font-size: 13px;
+  padding: 6px 16px;
   border-radius: 999px;
-
-  background: white;
-
-  border: 1px solid #E6DED3;
-
+  border: 0.5px solid #D3D1C7;
+  color: #5F5E5A;
+  background: #fff;
   cursor: pointer;
-
-  transition: 0.2s;
+  transition: all 0.15s;
 }
 
 .chip:hover {
   background: #FAECE7;
+  border-color: #F0997B;
 }
 
 .chip.active {
   background: #FAECE7;
-  color: #993C1D;
   border-color: #F0997B;
+  color: #993C1D;
 }
 
-/* GRIGLIA */
+/* ─── CONTATORE ──────────────────────────────── */
+
+.results-label {
+  font-size: 12px;
+  color: #888780;
+  margin-bottom: 1.25rem;
+}
+
+/* ─── GRIGLIA ────────────────────────────────── */
 
 .grid {
   display: grid;
-
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
 }
 
-/* CARD */
+/* ─── CARD ───────────────────────────────────── */
 
 .card {
-  border-radius: 18px;
-
-  padding: 1.2rem;
-
-  transition: 0.25s;
-
-  border: 1px solid rgba(0,0,0,0.04);
-}
-
-/* Colori pastello alternati */
-
-.card:nth-child(4n + 1) {
-  background: #FFF3EC;
-}
-
-.card:nth-child(4n + 2) {
-  background: #F1F8EC;
-}
-
-.card:nth-child(4n + 3) {
-  background: #FFF8EC;
-}
-
-.card:nth-child(4n + 4) {
-  background: #FFF8EC;
+  background: #fff;
+  border: 0.5px solid #E8DDD0;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-
-  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
-/* EMOJI */
-
-.img {
-  font-size: 48px;
-
-  text-align: center;
-
-  margin-bottom: 1rem;
+.card-img {
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44px;
 }
 
-/* CONTENUTO */
+.card-img--warm  { background: #FFF3EC; }
+.card-img--green { background: #F1F8EC; }
+.card-img--amber { background: #FFFBEC; }
 
-.content h3 {
+.card-body {
+  padding: 12px 14px 14px;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
   color: #2C2C2A;
-
-  margin-bottom: 0.5rem;
+  margin-bottom: 4px;
 }
 
-.meta {
-  color: #666;
-
-  font-size: 13px;
-
-  margin-bottom: 1rem;
+.card-meta {
+  font-size: 12px;
+  color: #888780;
+  margin-bottom: 10px;
 }
 
-/* TAG */
-
-.tags {
+.card-tags {
   display: flex;
   flex-wrap: wrap;
-
-  gap: 6px;
+  gap: 5px;
 }
 
-.tags span {
-  background: rgba(255,255,255,0.7);
-
-  padding: 4px 10px;
-
+.tag {
+  font-size: 11px;
+  background: #FAECE7;
+  color: #993C1D;
+  padding: 2px 9px;
   border-radius: 999px;
-
-  font-size: 12px;
-
-  color: #555;
 }
 
-/* RESPONSIVE */
+.tag--green {
+  background: #EAF3DE;
+  color: #3B6D11;
+}
 
-@media (max-width: 768px) {
+/* ─── STATO VUOTO ────────────────────────────── */
 
-  .recipes-page {
-    padding: 1rem;
+.empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #888780;
+  font-size: 14px;
+}
+
+.empty-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────── */
+
+@media (max-width: 600px) {
+  .content {
+    padding: 1.5rem 1rem 3rem;
   }
 
-  .header h1 {
-    font-size: 1.7rem;
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
 
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
