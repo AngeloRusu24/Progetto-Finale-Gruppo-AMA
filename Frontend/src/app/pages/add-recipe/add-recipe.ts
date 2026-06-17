@@ -85,7 +85,7 @@ export class AddRecipeComponent {
       const lines = this.form.ingredients.split('\n').filter(l => l.trim());
       for (const line of lines) {
         const [name, quantity] = line.split('-').map(s => s.trim());
-        await fetch('http://localhost:3000/api/ingredients', {
+        const ingRes = await fetch('http://localhost:3000/api/ingredients', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -97,6 +97,9 @@ export class AddRecipeComponent {
             recipeId: recipeData.insertId
           })
         });
+        if (!ingRes.ok) {
+          console.error('Errore nel salvataggio dell\'ingrediente:', name || line);
+        }
       }
 
       this.router.navigate(['/recipes']);

@@ -37,8 +37,8 @@ export const create = async (req: Request, res: Response) => {
   try {
     const { title, description, category, emoji } = req.body;
     const userId = (req as any).userId;
-    await createRecipe(title, description, category, emoji, userId);
-    res.status(201).json({ message: 'Ricetta creata con successo!' });
+    const result: any = await createRecipe(title, description, category, emoji, userId);
+    res.status(201).json({ message: 'Ricetta creata con successo!', insertId: result.insertId });
   } catch (err) {
     res.status(500).json({ message: 'Errore nella creazione della ricetta' });
   }
