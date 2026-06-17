@@ -24,9 +24,9 @@
 }
 
 .logo {
-  font-size: 20px;
-  font-weight: 500;
-  color: #D85A30;
+  height: 78px;
+  width: auto;
+  cursor: pointer;
 }
 
 .nav-links {

@@ -21,9 +21,9 @@
 }
 
 .logo {
-  font-size: 20px;
-  font-weight: 500;
-  color: #D85A30;
+  height: 78px;
+  width: auto;
+  cursor: pointer;
 }
 
 .nav-links {
@@ -218,6 +218,7 @@
   border-radius: 999px;
 }
 
+
 .card-rating {
   display: flex;
   align-items: center;
@@ -237,3 +238,4 @@
   text-align: center;
   padding: 2rem 0;
 }
+
