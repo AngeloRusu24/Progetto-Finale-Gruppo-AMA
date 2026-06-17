@@ -5,10 +5,7 @@ import { Register } from './pages/register/register';
 import { RecipesComponent } from './pages/recipes/recipes';
 import { Login } from './pages/login/login';
 import { AddRecipeComponent } from './pages/add-recipe/add-recipe';
-<<<<<<< HEAD
-=======
 
->>>>>>> f3f1b55d4d1a0d0509de9d02990eb54da6f1beac
 import { RecipeDetail } from './pages/recipe-detail/recipe-detail';
 
 export const routes: Routes = [
