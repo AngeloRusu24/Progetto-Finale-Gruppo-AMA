@@ -1,17 +1,9 @@
-import pool from '../config/db';
+import mongoose from 'mongoose';
 
-export const createUser = async (username: string, email: string, password: string) => {
-  const [result] = await pool.execute(
-    'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-    [username, email, password]
-  );
-  return result;
-};
+const userSchema = new mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  email:    { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+}, { timestamps: true });
 
-export const findUserByEmail = async (email: string) => {
-  const [rows]: any = await pool.execute(
-    'SELECT * FROM users WHERE email = ?',
-    [email]
-  );
-  return rows[0];
-};
+export default mongoose.model('User', userSchema);

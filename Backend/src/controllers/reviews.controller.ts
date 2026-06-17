@@ -1,12 +1,22 @@
 import { Request, Response } from 'express';
-import { getReviewsByRecipe, createReview, deleteReview, hasUserReviewed } from '../models/review.model';
-import { getRecipeById } from '../models/recipe.model';
-import pool from '../config/db';
+import Review from '../models/review.model';
+import Recipe from '../models/recipe.model';
 
 export const getByRecipe = async (req: Request, res: Response) => {
   try {
-    const { recipeId } = req.params;
-    const reviews = await getReviewsByRecipe(Number(recipeId));
+    const reviews = await Review.find({ recipe: req.params.recipeId })
+      .populate('user', 'username');
+    res.json(reviews);
+  } catch (err) {
+    res.status(500).json({ message: 'Errore nel recupero delle recensioni' });
+  }
+};
+
+export const getMine = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).userId;
+    const reviews = await Review.find({ user: userId })
+      .populate('recipe', 'title');
     res.json(reviews);
   } catch (err) {
     res.status(500).json({ message: 'Errore nel recupero delle recensioni' });
@@ -18,23 +28,18 @@ export const create = async (req: Request, res: Response) => {
     const { comment, rating, recipeId } = req.body;
     const userId = (req as any).userId;
 
-    // controlla che la ricetta esista
-    const recipe: any = await getRecipeById(Number(recipeId));
+    const recipe = await Recipe.findById(recipeId);
     if (!recipe) return res.status(404).json({ message: 'Ricetta non trovata' });
 
-    // impedisce di recensire la propria ricetta
-    if (recipe.user_id === userId) {
+    if (recipe.user.toString() === userId) {
       return res.status(403).json({ message: 'Non puoi recensire la tua ricetta' });
     }
 
-    // impedisce di recensire due volte la stessa ricetta
-    const alreadyReviewed = await hasUserReviewed(userId, recipeId);
-    if (alreadyReviewed) {
-      return res.status(403).json({ message: 'Hai già recensito questa ricetta' });
-    }
+    const already = await Review.findOne({ user: userId, recipe: recipeId });
+    if (already) return res.status(403).json({ message: 'Hai già recensito questa ricetta' });
 
-    await createReview(comment, rating, userId, recipeId);
-    res.status(201).json({ message: 'Recensione aggiunta con successo!' });
+    const review = await Review.create({ comment, rating, user: userId, recipe: recipeId });
+    res.status(201).json(review);
   } catch (err) {
     res.status(500).json({ message: 'Errore nella creazione della recensione' });
   }
@@ -42,26 +47,9 @@ export const create = async (req: Request, res: Response) => {
 
 export const remove = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    await deleteReview(Number(id));
+    await Review.findByIdAndDelete(req.params.id);
     res.json({ message: 'Recensione eliminata con successo!' });
   } catch (err) {
     res.status(500).json({ message: 'Errore nell\'eliminazione della recensione' });
-  }
-};
-
-export const getMine = async (req: Request, res: Response) => {
-  try {
-    const userId = (req as any).userId;
-    const [rows]: any = await pool.execute(
-      `SELECT reviews.*, recipes.title as recipe_title
-       FROM reviews
-       JOIN recipes ON reviews.recipe_id = recipes.id
-       WHERE reviews.user_id = ?`,
-      [userId]
-    );
-    res.json(rows);
-  } catch (err) {
-    res.status(500).json({ message: 'Errore nel recupero delle recensioni' });
   }
 };

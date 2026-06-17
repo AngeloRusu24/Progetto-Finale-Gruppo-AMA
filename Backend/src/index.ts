@@ -1,12 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import connectDB from './config/db';
 import authRoutes from './routes/auth.routes';
 import recipesRoutes from './routes/recipes.routes';
 import ingredientsRoutes from './routes/ingredients.routes';
 import reviewsRoutes from './routes/reviews.routes';
 
 dotenv.config();
+connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,9 +25,6 @@ app.get('/', (req, res) => {
   res.json({ message: 'La Ricetta Perfetta API funzionante!' });
 });
 
-
 app.listen(PORT, () => {
   console.log(`Server in ascolto su http://localhost:${PORT}`);
-}).on('error', (err) => {
-  console.error('Errore avvio server:', err);
 });
