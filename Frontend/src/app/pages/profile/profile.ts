@@ -1,53 +1,91 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
 
-  // Dati utente (mock — poi arriveranno dal backend)
-  user = {
-    name: 'Maria Rossi',
-    initials: 'MR',
-    email: 'maria@email.com',
-    createdAt: 'gennaio 2025'
-  };
+  constructor(private router: Router) {}
 
-  // Tutte le ricette dell'utente
-  myRecipes = [
-    { title: 'Carbonara',      emoji: '🍝', category: 'Primi',   time: 20, difficulty: 'Media',  rating: 4.8 },
-    { title: 'Tiramisù',       emoji: '🍮', category: 'Dolci',   time: 40, difficulty: 'Facile', rating: 4.9 },
-    { title: 'Pollo al forno', emoji: '🍗', category: 'Secondi', time: 60, difficulty: 'Media',  rating: 4.5 },
-  ];
+  // dati utente dal localStorage
+  user: any = null;
 
-  // Migliori ricette (ordinate per rating)
-  get bestRecipes() {
-    return [...this.myRecipes]
-      .sort((a, b) => b.rating - a.rating)
-      .slice(0, 2);
+  // ricette dell'utente caricate dall'API
+  myRecipes: any[] = [];
+
+  // recensioni ricevute sulle ricette dell'utente
+  comments: any[] = [];
+
+  loading = true;
+
+  ngOnInit() {
+    // recupera utente salvato al login
+    const stored = localStorage.getItem('user');
+    if (!stored) {
+      // se non loggato, reindirizza al login
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.user = JSON.parse(stored);
+    this.loadData();
   }
 
-  // Statistiche calcolate
+  async loadData() {
+    const token = localStorage.getItem('token');
+    try {
+      // carica le mie ricette e le recensioni in parallelo
+      const [recipesRes, reviewsRes] = await Promise.all([
+        fetch('http://localhost:3000/api/recipes/mine', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('http://localhost:3000/api/reviews/mine', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+
+      this.myRecipes = await recipesRes.json();
+      this.comments = await reviewsRes.json();
+    } catch (err) {
+      console.error('Errore nel caricamento del profilo', err);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  // media valutazioni
   get avgRating(): string {
-    const avg = this.myRecipes.reduce((sum, r) => sum + r.rating, 0) / this.myRecipes.length;
+    if (this.myRecipes.length === 0) return '0';
+    const avg = this.myRecipes.reduce((sum: number, r: any) => sum + (r.avg_rating || 0), 0) / this.myRecipes.length;
     return avg.toFixed(1);
   }
 
-  // Commenti ricevuti
-  comments = [
-    { initials: 'MA', user: 'Marco', recipeTitle: 'Carbonara',      text: 'Ricetta fantastica!',          rating: 5 },
-    { initials: 'AN', user: 'Anna',  recipeTitle: 'Tiramisù',        text: 'Molto facile da seguire.',     rating: 4 },
-    { initials: 'LU', user: 'Luca',  recipeTitle: 'Tiramisù',        text: 'Ottimo risultato!',            rating: 5 },
-  ];
+  // migliori 2 ricette per rating
+  get bestRecipes() {
+    return [...this.myRecipes]
+      .sort((a, b) => (b.avg_rating || 0) - (a.avg_rating || 0))
+      .slice(0, 2);
+  }
 
-  // Genera stringa di stelle (es. 4 → "★★★★☆")
   getStars(rating: number): string {
     const full = Math.round(rating);
     return '★'.repeat(full) + '☆'.repeat(5 - full);
+  }
+
+  // iniziali dell'utente per l'avatar
+  get initials(): string {
+    if (!this.user?.username) return '?';
+    return this.user.username.split(' ').map((n: string) => n[0]).join('').toUpperCase();
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.router.navigate(['/login']);
   }
 }

@@ -4,9 +4,9 @@
   <nav class="navbar">
     <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
     <div class="nav-links">
-      <a class="nav-link" href="#">Esplora</a>
-      <a class="nav-link nav-link--active" href="#">Ricette</a>
-      <a class="nav-link" href="#">Profilo</a>
+      <a class="nav-link" routerLink="/">Home</a>
+      <a class="nav-link nav-link--active" routerLink="/recipes">Ricette</a>
+      <a class="nav-link" routerLink="/profile">Profilo</a>
       <button class="btn-primary">Accedi</button>
     </div>
   </nav>
@@ -22,7 +22,13 @@
       <button class="btn-add" (click)="goToAddRecipe()">+ Aggiungi ricetta</button>
     </div>
 
-    <!-- FILTRI -->
+    <!-- RICERCA PER CHEF -->
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" placeholder="Cerca uno chef..." (input)="onSearchUsername($event)" />
+    </div>
+
+    <!-- FILTRI TAG -->
     <div class="filters">
       <span
         class="chip"
@@ -33,27 +39,30 @@
       </span>
     </div>
 
+    <!-- STATO CARICAMENTO -->
+    <p class="loading" *ngIf="loading">Caricamento ricette...</p>
+
     <!-- CONTATORE RISULTATI -->
-    <p class="results-label">
+    <p class="results-label" *ngIf="!loading">
       {{ filteredRecipes.length }}
       {{ filteredRecipes.length === 1 ? 'ricetta trovata' : 'ricette trovate' }}
     </p>
 
     <!-- GRIGLIA RICETTE -->
-    <div class="grid" *ngIf="filteredRecipes.length > 0; else empty">
-      <div class="card" *ngFor="let r of filteredRecipes">
-        <div class="card-img" [class]="'card-img card-img--' + r.bg">
+    <div class="grid" *ngIf="!loading && filteredRecipes.length > 0">
+      <!-- ogni card è cliccabile e porta al dettaglio -->
+      <div class="card" *ngFor="let r of filteredRecipes" [routerLink]="['/recipe', r.id]">
+        <div class="card-img">
           {{ r.emoji }}
         </div>
         <div class="card-body">
           <p class="card-title">{{ r.title }}</p>
-          <p class="card-meta">⏱ {{ r.time }} min · {{ r.difficulty }}</p>
-          <div class="card-tags">
-            <span
-              class="tag"
-              *ngFor="let t of r.tags"
-              [class.tag--green]="t === 'Vegani' || t === 'Antipasti'">
-              {{ t }}
+          <p class="card-meta">da {{ r.username }}</p>
+          <div class="card-footer">
+            <span class="tag">{{ r.category }}</span>
+            <!-- valutazione media se presente -->
+            <span class="stars" *ngIf="r.review_count > 0">
+              {{ getStars(r.avg_rating) }} ({{ r.review_count }})
             </span>
           </div>
         </div>
@@ -61,12 +70,10 @@
     </div>
 
     <!-- STATO VUOTO -->
-    <ng-template #empty>
-      <div class="empty">
-        <p class="empty-icon">🍽️</p>
-        <p>Nessuna ricetta trovata con i filtri selezionati.</p>
-      </div>
-    </ng-template>
+    <div class="empty" *ngIf="!loading && filteredRecipes.length === 0">
+      <p class="empty-icon">🍽️</p>
+      <p>Nessuna ricetta trovata.</p>
+    </div>
 
   </div>
 </div>

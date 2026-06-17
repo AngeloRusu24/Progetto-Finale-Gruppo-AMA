@@ -16,12 +16,16 @@ export class AddRecipeComponent {
 
   availableTags = ['Antipasti', 'Primi', 'Secondi', 'Dolci', 'Pasta', 'Carne', 'Pesce', 'Vegani'];
 
+  errorMessage = '';
+  loading = false;
+
   form = {
     title: '',
     description: '',
     time: null as number | null,
     difficulty: 'Facile',
-    ingredients: '',
+    emoji: '🍽️',
+    ingredients: '' as string,
     steps: '',
     tags: [] as string[],
   };
@@ -38,15 +42,70 @@ export class AddRecipeComponent {
     return (
       this.form.title.trim().length > 0 &&
       this.form.ingredients.trim().length > 0 &&
-      this.form.steps.trim().length > 0 &&
       this.form.tags.length > 0
     );
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (!this.isValid) return;
-    console.log('Nuova ricetta:', this.form);
-    this.router.navigate(['/recipes']);
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.loading = true;
+    this.errorMessage = '';
+
+    try {
+      // prima crea la ricetta
+      const recipeRes = await fetch('http://localhost:3000/api/recipes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          title: this.form.title,
+          description: this.form.description,
+          category: this.form.tags[0], // categoria principale = primo tag
+          emoji: this.form.emoji,
+        })
+      });
+
+      const recipeData = await recipeRes.json();
+
+      if (!recipeRes.ok) {
+        this.errorMessage = recipeData.message || 'Errore nella creazione della ricetta';
+        return;
+      }
+
+      // poi aggiunge gli ingredienti riga per riga
+      const lines = this.form.ingredients.split('\n').filter(l => l.trim());
+      for (const line of lines) {
+        const [name, quantity] = line.split('-').map(s => s.trim());
+        await fetch('http://localhost:3000/api/ingredients', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            name: name || line,
+            quantity: quantity || '',
+            recipeId: recipeData.insertId
+          })
+        });
+      }
+
+      this.router.navigate(['/recipes']);
+
+    } catch (err) {
+      this.errorMessage = 'Errore di connessione al server';
+    } finally {
+      this.loading = false;
+    }
   }
 
   onCancel() {

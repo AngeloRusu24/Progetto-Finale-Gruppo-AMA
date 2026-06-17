@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgIf } from "@angular/common"
-import { RouterLink } from '@angular/router';
+import { NgIf } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,27 +11,54 @@ import { RouterLink } from '@angular/router';
 })
 export class Login {
 
+  constructor(private router: Router) {}
+
+  // messaggio di errore da mostrare all'utente
+  errorMessage = '';
+  loading = false;
+
   loginForm: FormGroup = new FormGroup({
-    email: new FormControl('',[Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)])
   });
 
-  onSubmit(): void{
-
-    if(this.loginForm.invalid){
+  async onSubmit(): Promise<void> {
+    if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
 
-    const loginData = {
-      email: this.loginForm.value.email,
-      password: this.loginForm.value.password
-    };
+    this.loading = true;
+    this.errorMessage = '';
 
-    console.log('Login data:', loginData);
-    alert('Login effettuato!');
+    try {
+      const res = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: this.loginForm.value.email,
+          password: this.loginForm.value.password
+        })
+      });
 
-    this.loginForm.reset();
+      const data = await res.json();
+
+      if (!res.ok) {
+        this.errorMessage = data.message || 'Errore durante il login';
+        return;
+      }
+
+      // salva il token e i dati utente nel localStorage
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      // reindirizza al profilo
+      this.router.navigate(['/profile']);
+
+    } catch (err) {
+      this.errorMessage = 'Errore di connessione al server';
+    } finally {
+      this.loading = false;
+    }
   }
-
 }

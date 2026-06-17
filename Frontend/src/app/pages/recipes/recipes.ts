@@ -1,56 +1,83 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-recipes',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './recipes.html',
   styleUrl: './recipes.css'
 })
-export class RecipesComponent {
+export class RecipesComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  // Filtri disponibili
+  // filtri disponibili
   tags = ['Antipasti', 'Primi', 'Secondi', 'Dolci', 'Pasta', 'Carne', 'Pesce', 'Vegani'];
 
-  // Tag selezionati (multi-select)
+  // tag selezionati (multi-select)
   selectedTags: string[] = [];
 
-  // Ricette (mock — poi arriveranno dal backend)
-  recipes = [
-    { title: 'Carbonara',           time: 20, difficulty: 'Media',  emoji: '🍝', bg: 'warm',  tags: ['Primi', 'Pasta', 'Carne'] },
-    { title: 'Insalata Greca',      time: 10, difficulty: 'Facile', emoji: '🥗', bg: 'green', tags: ['Antipasti', 'Vegani'] },
-    { title: 'Tiramisù',            time: 40, difficulty: 'Facile', emoji: '🍰', bg: 'amber', tags: ['Dolci'] },
-    { title: 'Salmone alla griglia',time: 25, difficulty: 'Media',  emoji: '🐟', bg: 'warm',  tags: ['Secondi', 'Pesce'] },
-  ];
+  // ricerca per username
+  searchUsername = '';
 
-  // Selezione / deselezione tag
+  // ricette caricate dall'API
+  recipes: any[] = [];
+
+  // stato di caricamento
+  loading = true;
+
+  ngOnInit() {
+    this.loadRecipes();
+  }
+
+  async loadRecipes() {
+    this.loading = true;
+    try {
+      const params = new URLSearchParams();
+      if (this.selectedTags.length === 1) params.set('category', this.selectedTags[0]);
+      if (this.searchUsername) params.set('username', this.searchUsername);
+
+      const res = await fetch(`http://localhost:3000/api/recipes?${params.toString()}`);
+      this.recipes = await res.json();
+    } catch (err) {
+      console.error('Errore nel caricamento delle ricette', err);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  // selezione / deselezione tag
   toggleTag(tag: string) {
     if (this.selectedTags.includes(tag)) {
       this.selectedTags = this.selectedTags.filter(t => t !== tag);
     } else {
       this.selectedTags.push(tag);
     }
+    this.loadRecipes();
   }
 
-  // Ricette filtrate (AND: devono avere tutti i tag selezionati)
+  onSearchUsername(event: Event) {
+    this.searchUsername = (event.target as HTMLInputElement).value;
+    this.loadRecipes();
+  }
+
+  // ricette filtrate lato client per multi-tag
   get filteredRecipes() {
     if (this.selectedTags.length === 0) return this.recipes;
     return this.recipes.filter(r =>
-      this.selectedTags.every(tag => r.tags.includes(tag))
+      this.selectedTags.every(tag => r.category === tag || r.tags?.includes(tag))
     );
   }
 
-  // Naviga alla pagina aggiungi ricetta
-  goToAddRecipe() {
-    this.router.navigate(['/recipes/new']);
+  // stelle dalla valutazione media
+  getStars(rating: number): string {
+    if (!rating) return '';
+    return '⭐'.repeat(Math.round(rating));
   }
 
-  // Torna alla home / esplora
-  goHome() {
-    this.router.navigate(['/']);
+  goToAddRecipe() {
+    this.router.navigate(['/recipes/new']);
   }
 }

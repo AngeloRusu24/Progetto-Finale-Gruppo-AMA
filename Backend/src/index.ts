@@ -23,6 +23,9 @@ app.get('/', (req, res) => {
   res.json({ message: 'La Ricetta Perfetta API funzionante!' });
 });
 
+
 app.listen(PORT, () => {
   console.log(`Server in ascolto su http://localhost:${PORT}`);
+}).on('error', (err) => {
+  console.error('Errore avvio server:', err);
 });

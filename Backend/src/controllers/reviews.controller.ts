@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { getReviewsByRecipe, createReview, deleteReview, hasUserReviewed } from '../models/review.model';
 import { getRecipeById } from '../models/recipe.model';
+import pool from '../config/db';
 
 export const getByRecipe = async (req: Request, res: Response) => {
   try {
@@ -46,5 +47,21 @@ export const remove = async (req: Request, res: Response) => {
     res.json({ message: 'Recensione eliminata con successo!' });
   } catch (err) {
     res.status(500).json({ message: 'Errore nell\'eliminazione della recensione' });
+  }
+};
+
+export const getMine = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).userId;
+    const [rows]: any = await pool.execute(
+      `SELECT reviews.*, recipes.title as recipe_title
+       FROM reviews
+       JOIN recipes ON reviews.recipe_id = recipes.id
+       WHERE reviews.user_id = ?`,
+      [userId]
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ message: 'Errore nel recupero delle recensioni' });
   }
 };

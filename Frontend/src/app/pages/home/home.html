@@ -1,71 +1,58 @@
 <div class="page">
 
+  <!-- NAVBAR -->
   <nav class="navbar">
     <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
     <div class="nav-links">
-      <a class="nav-link" href="#">Esplora</a>
-      <a class="nav-link" href="#">Ricette</a>
-      <a class="nav-link" href="#">Profilo</a>
-      <button class="btn-primary">Accedi</button>
+      <!-- routerLink per navigare senza ricaricare la pagina -->
+      <a class="nav-link" routerLink="/recipes">Ricette</a>
+      <a class="nav-link" routerLink="/profile">Profilo</a>
+      <button class="btn-primary" routerLink="/login">Accedi</button>
     </div>
   </nav>
 
+  <!-- HERO -->
   <div class="hero">
-    <p class="hero-tag">Condividi la tua cucina e le tue ricette!</p>
-    <h1 class="hero-title">Scopri e condividi ricette con il mondo</h1>
+    <p class="hero-tag">🍳 Benvenuto su La Ricetta Perfetta</p>
+    <h1 class="hero-title">Cucina, condividi e scopri ricette dal mondo</h1>
     <p class="hero-sub">
-      Trova ispirazione, salva le tue preferite e condividi le ricette di casa tua.
+      Una piattaforma per condividere le tue ricette preferite, scoprire quelle degli altri chef e lasciare recensioni.
     </p>
-    <div class="search-bar">
-      <span class="search-icon">🔍</span>
-      <input type="text" placeholder="Cerca uno chef..." (input)="onSearchUsername($event)" />
+    <!-- bottoni di chiamata all'azione -->
+    <div class="hero-actions">
+      <button class="btn-primary" routerLink="/recipes">Esplora le ricette</button>
+      <button class="btn-secondary" routerLink="/register">Registrati gratis</button>
     </div>
   </div>
 
-  <div class="categories">
-    <div class="category-row">
-      <span
-        class="chip"
-        *ngFor="let cat of portate"
-        [class.active]="selectedPortata === cat"
-        (click)="selectPortata(cat)">
-        {{ cat }}
-      </span>
-    </div>
-    <div class="category-row">
-      <span
-        class="chip"
-        *ngFor="let ing of ingredienti"
-        [class.active]="selectedIngrediente === ing"
-        (click)="selectIngrediente(ing)">
-        {{ ing }}
-      </span>
+  <!-- STATISTICHE -->
+  <div class="stats">
+    <div class="stat-card" *ngFor="let stat of stats">
+      <p class="stat-value">{{ stat.value }}</p>
+      <p class="stat-label">{{ stat.label }}</p>
     </div>
   </div>
 
-  <p class="loading" *ngIf="loading">Caricamento ricette...</p>
-
-  <p class="section-title" *ngIf="!loading">Ricette popolari</p>
-
-  <div class="cards" *ngIf="!loading">
-    <div class="card" *ngFor="let recipe of recipes" [routerLink]="['/recipe', recipe.id]">
-      <div class="card-img">
-        {{ recipe.emoji }}
+  <!-- SEZIONE COME FUNZIONA -->
+  <div class="how-it-works">
+    <h2 class="section-title">Come funziona?</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-icon">📝</span>
+        <p class="step-title">Registrati</p>
+        <p class="step-desc">Crea il tuo profilo gratuitamente in pochi secondi.</p>
       </div>
-      <div class="card-body">
-        <p class="card-title">{{ recipe.title }}</p>
-        <div class="card-meta">
-          <span>da {{ recipe.username }}</span>
-          <span class="badge">{{ recipe.category }}</span>
-        </div>
-        <div class="card-rating" *ngIf="recipe.review_count > 0">
-          <span>{{ getStars(recipe.avg_rating) }}</span>
-          <span class="rating-count">({{ recipe.review_count }})</span>
-        </div>
+      <div class="step">
+        <span class="step-icon">🍕</span>
+        <p class="step-title">Pubblica ricette</p>
+        <p class="step-desc">Condividi le tue ricette con ingredienti e istruzioni.</p>
+      </div>
+      <div class="step">
+        <span class="step-icon">⭐</span>
+        <p class="step-title">Recensisci</p>
+        <p class="step-desc">Lascia un voto e un commento sulle ricette degli altri.</p>
       </div>
     </div>
-    <p class="empty" *ngIf="recipes.length === 0">Nessuna ricetta trovata.</p>
   </div>
 
 </div>
-
