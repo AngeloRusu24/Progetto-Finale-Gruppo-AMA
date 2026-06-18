@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
@@ -13,7 +13,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
   // utente loggato (da localStorage)
@@ -71,6 +72,7 @@ export class ProfileComponent implements OnInit {
       console.error('Errore nel caricamento del profilo', err);
     } finally {
       this.loading = false;
+      this.cdr.detectChanges();
     }
   }
 
@@ -94,6 +96,7 @@ export class ProfileComponent implements OnInit {
       console.error('Errore nel caricamento del profilo', err);
     } finally {
       this.loading = false;
+      this.cdr.detectChanges();
     }
   }
 
