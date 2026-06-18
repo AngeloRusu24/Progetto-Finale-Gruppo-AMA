@@ -255,3 +255,51 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ─── SEARCH BAR ─────────────────────────────── */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 0.5px solid #D3D1C7;
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin-bottom: 1.25rem;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #2C2C2A;
+  background: transparent;
+  flex: 1;
+}
+
+.search-bar input::placeholder {
+  color: #B4B2A9;
+}
+
+/* ─── LOADING ────────────────────────────────── */
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #888780;
+  font-size: 14px;
+}
+
+/* ─── STARS ──────────────────────────────────── */
+
+.stars {
+  font-size: 11px;
+  color: #888780;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

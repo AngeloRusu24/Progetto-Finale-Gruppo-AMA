@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,9 +12,17 @@ import { Router } from '@angular/router';
 })
 export class AddRecipeComponent {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private cdr: ChangeDetectorRef) {}
 
   availableTags = ['Antipasti', 'Primi', 'Secondi', 'Dolci', 'Pasta', 'Carne', 'Pesce', 'Vegani'];
+
+  // emoji disponibili per la ricetta
+  availableEmojis = [
+    '🍝', '🍕', '🍣', '🍜', '🍲', '🥗', '🥩', '🍗',
+    '🐟', '🦐', '🥕', '🥦', '🧀', '🥚', '🍳', '🫕',
+    '🍮', '🎂', '🍰', '🧁', '🍩', '🍪', '🫙', '🍞',
+    '🥐', '🥙', '🌮', '🥘', '🍱', '🍛', '🥗', '🍽️'
+  ];
 
   errorMessage = '';
   loading = false;
@@ -38,6 +46,10 @@ export class AddRecipeComponent {
     }
   }
 
+  selectEmoji(emoji: string) {
+    this.form.emoji = emoji;
+  }
+
   get isValid(): boolean {
     return (
       this.form.title.trim().length > 0 &&
@@ -59,7 +71,6 @@ export class AddRecipeComponent {
     this.errorMessage = '';
 
     try {
-      // prima crea la ricetta
       const recipeRes = await fetch('http://localhost:3000/api/recipes', {
         method: 'POST',
         headers: {
@@ -69,7 +80,7 @@ export class AddRecipeComponent {
         body: JSON.stringify({
           title: this.form.title,
           description: this.form.description,
-          category: this.form.tags[0], // categoria principale = primo tag
+          category: this.form.tags[0],
           emoji: this.form.emoji,
         })
       });
@@ -81,11 +92,10 @@ export class AddRecipeComponent {
         return;
       }
 
-      // poi aggiunge gli ingredienti riga per riga
       const lines = this.form.ingredients.split('\n').filter(l => l.trim());
       for (const line of lines) {
         const [name, quantity] = line.split('-').map(s => s.trim());
-        const ingRes = await fetch('http://localhost:3000/api/ingredients', {
+        await fetch('http://localhost:3000/api/ingredients', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -94,12 +104,9 @@ export class AddRecipeComponent {
           body: JSON.stringify({
             name: name || line,
             quantity: quantity || '',
-            recipeId: recipeData.insertId
+            recipeId: recipeData._id
           })
         });
-        if (!ingRes.ok) {
-          console.error('Errore nel salvataggio dell\'ingrediente:', name || line);
-        }
       }
 
       this.router.navigate(['/recipes']);
@@ -108,6 +115,7 @@ export class AddRecipeComponent {
       this.errorMessage = 'Errore di connessione al server';
     } finally {
       this.loading = false;
+      this.cdr.detectChanges();
     }
   }
 

@@ -50,14 +50,14 @@
 
     <!-- GRIGLIA RICETTE -->
     <div class="grid" *ngIf="!loading && filteredRecipes.length > 0">
-      <!-- ogni card è cliccabile e porta al dettaglio -->
-      <div class="card" *ngFor="let r of filteredRecipes" [routerLink]="['/recipe', r.id]">
+      <!-- ogni card è cliccabile e porta al dettaglio tramite _id di MongoDB -->
+      <div class="card" *ngFor="let r of filteredRecipes" [routerLink]="['/recipe', r._id]">
         <div class="card-img">
           {{ r.emoji }}
         </div>
         <div class="card-body">
           <p class="card-title">{{ r.title }}</p>
-          <p class="card-meta">da {{ r.username }}</p>
+          <p class="card-meta">da {{ r.user?.username }}</p>
           <div class="card-footer">
             <span class="tag">{{ r.category }}</span>
             <!-- valutazione media se presente -->

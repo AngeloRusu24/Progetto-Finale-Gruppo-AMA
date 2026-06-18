@@ -1,5 +1,4 @@
 <div class="page">
-
   <!-- NAVBAR -->
   <nav class="navbar">
     <span class="logo">🍳 La Ricetta Perfetta</span>
@@ -19,21 +18,17 @@
 
     <!-- SCHEDA RICETTA -->
     <div class="recipe-card">
-
       <!-- Emoji e titolo -->
       <div class="recipe-hero" [style.background]="'#FFF3EC'">
         <span class="recipe-emoji">{{ recipe.emoji }}</span>
       </div>
-
       <div class="recipe-info">
         <div class="recipe-header">
           <h1 class="recipe-title">{{ recipe.title }}</h1>
           <!-- badge categoria -->
           <span class="badge">{{ recipe.category }}</span>
         </div>
-
         <p class="recipe-description">{{ recipe.description }}</p>
-
         <!-- valutazione media -->
         <div class="rating" *ngIf="recipe.review_count > 0">
           <span>{{ getStars(recipe.avg_rating) }}</span>
@@ -47,8 +42,9 @@
     <div class="section">
       <h2 class="section-title">👨‍🍳 Chef</h2>
       <div class="author-card">
-        <div class="author-avatar">{{ recipe.username.charAt(0).toUpperCase() }}</div>
-        <p class="author-name">{{ recipe.username }}</p>
+        <!-- user è ora un oggetto con _id e username -->
+        <div class="author-avatar">{{ recipe.user?.username?.charAt(0)?.toUpperCase() }}</div>
+        <p class="author-name">{{ recipe.user?.username }}</p>
       </div>
     </div>
 
@@ -70,7 +66,8 @@
       <div class="reviews-list" *ngIf="reviews.length > 0">
         <div class="review-card" *ngFor="let review of reviews">
           <div class="review-header">
-            <span class="review-author">{{ review.username }}</span>
+            <!-- user è ora un oggetto popolato con username -->
+            <span class="review-author">{{ review.user?.username }}</span>
             <span class="review-stars">{{ getStars(review.rating) }}</span>
           </div>
           <p class="review-comment">{{ review.comment }}</p>

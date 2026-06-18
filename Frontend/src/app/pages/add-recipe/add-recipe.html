@@ -1,25 +1,21 @@
 <div class="page">
-
   <nav class="navbar">
     <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
     <div class="nav-links">
-      <a class="nav-link" href="#">Esplora</a>
-      <a class="nav-link" href="#">Ricette</a>
-      <a class="nav-link" href="#">Profilo</a>
+      <a class="nav-link" routerLink="/">Home</a>
+      <a class="nav-link" routerLink="/recipes">Ricette</a>
+      <a class="nav-link" routerLink="/profile">Profilo</a>
       <button class="btn-primary">Accedi</button>
     </div>
   </nav>
 
   <div class="content">
-
     <a class="back-link" (click)="onCancel()">← Torna alle ricette</a>
-
     <h1 class="page-title">Aggiungi una ricetta</h1>
 
     <!-- INFO BASE -->
     <div class="form-section">
       <p class="form-section-title">Informazioni base</p>
-
       <div class="field">
         <label class="label" for="title">Titolo ricetta</label>
         <input
@@ -30,7 +26,6 @@
           [(ngModel)]="form.title"
           name="title" />
       </div>
-
       <div class="field">
         <label class="label" for="description">Descrizione</label>
         <textarea
@@ -41,7 +36,6 @@
           name="description">
         </textarea>
       </div>
-
       <div class="row2">
         <div class="field">
           <label class="label" for="time">Tempo (minuti)</label>
@@ -69,6 +63,29 @@
       </div>
     </div>
 
+    <!-- SCELTA EMOJI -->
+    <div class="form-section">
+      <p class="form-section-title">Emoji del piatto</p>
+      <p class="field-hint">Seleziona un'emoji che rappresenta la tua ricetta</p>
+
+      <!-- anteprima emoji selezionata -->
+      <div class="emoji-preview">
+        <span class="emoji-selected">{{ form.emoji }}</span>
+        <span class="emoji-selected-label">Emoji selezionata</span>
+      </div>
+
+      <!-- griglia di emoji cliccabili -->
+      <div class="emoji-grid">
+        <span
+          class="emoji-option"
+          *ngFor="let e of availableEmojis"
+          [class.active]="form.emoji === e"
+          (click)="selectEmoji(e)">
+          {{ e }}
+        </span>
+      </div>
+    </div>
+
     <!-- CATEGORIE -->
     <div class="form-section">
       <p class="form-section-title">Categorie</p>
@@ -87,18 +104,16 @@
     <!-- INGREDIENTI E PROCEDIMENTO -->
     <div class="form-section">
       <p class="form-section-title">Ingredienti e procedimento</p>
-
       <div class="field">
         <label class="label" for="ingredients">Ingredienti</label>
         <textarea
           id="ingredients"
           class="input"
-          placeholder="Un ingrediente per riga&#10;Es. 200g pasta&#10;2 uova&#10;100g guanciale"
+          placeholder="Un ingrediente per riga&#10;Es. Pasta - 200g&#10;Uova - 2&#10;Guanciale - 100g"
           [(ngModel)]="form.ingredients"
           name="ingredients">
         </textarea>
       </div>
-
       <div class="field">
         <label class="label" for="steps">Procedimento</label>
         <textarea
@@ -111,17 +126,19 @@
       </div>
     </div>
 
+    <!-- MESSAGGIO ERRORE -->
+    <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
+
     <!-- FOOTER -->
     <div class="form-footer">
       <button class="btn-cancel" (click)="onCancel()">Annulla</button>
       <button
         class="btn-submit"
         (click)="onSubmit()"
-        [disabled]="!isValid"
-        [class.disabled]="!isValid">
-        Pubblica ricetta
+        [disabled]="!isValid || loading"
+        [class.disabled]="!isValid || loading">
+        {{ loading ? 'Pubblicazione...' : 'Pubblica ricetta' }}
       </button>
     </div>
-
   </div>
 </div>

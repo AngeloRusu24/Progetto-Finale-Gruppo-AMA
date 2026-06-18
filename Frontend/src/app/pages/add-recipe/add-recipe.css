@@ -246,3 +246,55 @@ textarea.input {
     text-align: center;
   }
 }
+
+/* ─── EMOJI PICKER ───────────────────────────── */
+
+.emoji-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.emoji-selected {
+  font-size: 40px;
+  background: #FFF3EC;
+  border-radius: 12px;
+  padding: 8px 16px;
+}
+
+.emoji-selected-label {
+  font-size: 13px;
+  color: #888780;
+}
+
+.emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+}
+
+.emoji-option {
+  font-size: 24px;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  border: 1.5px solid transparent;
+  transition: all 0.15s;
+}
+
+.emoji-option:hover {
+  background: #FFF3EC;
+}
+
+.emoji-option.active {
+  background: #FAECE7;
+  border-color: #D85A30;
+}
+
+.error-msg {
+  color: #D85A30;
+  font-size: 13px;
+  margin-bottom: 1rem;
+}

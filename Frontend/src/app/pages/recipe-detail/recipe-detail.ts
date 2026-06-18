@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
@@ -11,29 +11,20 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 })
 export class RecipeDetail implements OnInit {
 
-  // dati della ricetta caricati dall'API
   recipe: any = null;
-
-  // lista degli ingredienti della ricetta
   ingredients: any[] = [];
-
-  // lista delle recensioni della ricetta
   reviews: any[] = [];
-
-  // stato di caricamento
   loading = true;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    // prende l'id dalla URL es. /recipe/3
     const id = this.route.snapshot.paramMap.get('id');
     if (id) this.loadRecipe(id);
   }
 
   async loadRecipe(id: string) {
     try {
-      // carica ricetta, ingredienti e recensioni in parallelo
       const [recipeRes, ingredientsRes, reviewsRes] = await Promise.all([
         fetch(`http://localhost:3000/api/recipes/${id}`),
         fetch(`http://localhost:3000/api/ingredients/recipe/${id}`),
@@ -44,14 +35,15 @@ export class RecipeDetail implements OnInit {
       this.ingredients = await ingredientsRes.json();
       this.reviews = await reviewsRes.json();
     } catch (err) {
-      console.error('Errore nel caricamento della ricetta', err);
+      console.error('Errore:', err);
     } finally {
       this.loading = false;
+      this.cdr.detectChanges();
     }
   }
 
-  // converte il rating numerico in stelle
   getStars(rating: number): string {
+    if (!rating) return '';
     return '⭐'.repeat(Math.round(rating));
   }
 }
