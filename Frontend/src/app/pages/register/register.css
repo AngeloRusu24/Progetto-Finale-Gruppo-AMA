@@ -219,3 +219,51 @@ button:disabled {
 .login-link a:hover {
   text-decoration: underline;
 }
+
+/* ─── RESPONSIVE ─────────────────────────────── */
+
+/* Per schermi Tablet / Metà schermo PC (sotto i 900px) */
+@media (max-width: 900px) {
+  .logo-text {
+    position: static;
+    transform: none;
+    font-size: 20px;
+    margin-left: 10px;
+  }
+
+  .navbar {
+
+    justify-content: space-between;
+  }
+
+  .logo-link {
+    flex: 1;
+    margin-right:2rem;
+  }
+}
+
+/* Per schermi Mobile (sotto i 600px) */
+@media (max-width: 600px) {
+  .content {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+
+  .logo-text {
+    display: none;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links {
+    gap: 1rem;
+  }
+}

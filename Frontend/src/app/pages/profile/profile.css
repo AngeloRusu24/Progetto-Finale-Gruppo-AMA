@@ -424,40 +424,48 @@
 
 /* ─── RESPONSIVE ─────────────────────────────── */
 
+/* Per schermi Tablet / Metà schermo PC (sotto i 900px) */
+@media (max-width: 900px) {
+  .logo-text {
+    position: static;
+    transform: none;
+    font-size: 20px;
+    margin-left: 10px;
+  }
+
+  .navbar {
+
+    justify-content: space-between;
+  }
+
+  .logo-link {
+    flex: 1;
+    margin-right:2rem;
+  }
+}
+
+/* Per schermi Mobile (sotto i 600px) */
 @media (max-width: 600px) {
   .content {
     padding: 1.5rem 1rem 3rem;
   }
 
-  .profile-hero {
+
+  .logo-text {
+    display: none;
+  }
+
+  .page-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
 
-  .profile-left {
-    align-items: center;
-  }
-
-  .stats-row {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .stats-row .stat-card:last-child {
-    grid-column: span 2;
-  }
-
-  .best-grid {
+  .grid {
     grid-template-columns: 1fr;
   }
 
-  .recipe-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .recipe-row-right {
-    padding-left: 50px;
+  .nav-links {
+    gap: 1rem;
   }
 }
