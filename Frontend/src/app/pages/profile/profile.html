@@ -8,8 +8,8 @@
     <span class="logo-text">La Ricetta Perfetta</span>
     <div class="nav-links">
       <a class="nav-link" href="#">Esplora</a>
-      <a class="nav-link" href="#">Ricette</a>
-      <a class="nav-link nav-link--active" href="#">Profilo</a>
+      <a class="nav-link" routerLink="/recipes">Ricette</a>
+      <a class="nav-link nav-link--active" routerLink="/profile">Profilo</a>
      <a class="btn-primary" routerLink="/login">Accedi</a>
     </div>
   </nav>
@@ -71,7 +71,7 @@
     <section class="section">
       <div class="section-header">
         <h2 class="section-title">Le mie ricette</h2>
-        <a class="section-link" href="#">Aggiungi nuova →</a>
+        <a class="section-link" routerLink="/recipes/new">Aggiungi nuova →</a>
       </div>
       <div class="recipes-list">
         <div class="recipe-row" *ngFor="let r of myRecipes">
