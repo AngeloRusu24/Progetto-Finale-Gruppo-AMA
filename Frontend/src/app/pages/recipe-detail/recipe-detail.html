@@ -83,7 +83,20 @@
     <button class="btn-primary" (click)="submitReview()">Invia recensione</button>
   </div>
 </div>
-
+<!-- LISTA RECENSIONI -->
+<div class="section">
+  <h2 class="section-title">💬 Recensioni</h2>
+  <div class="reviews-list" *ngIf="reviews.length > 0">
+    <div class="review-item" *ngFor="let rev of reviews">
+      <div class="review-header">
+        <span class="review-author">{{ rev.user?.username }}</span>
+        <span class="review-stars">{{ getStars(rev.rating) }}</span>
+      </div>
+      <p class="review-comment">{{ rev.comment }}</p>
+    </div>
+  </div>
+  <p class="empty" *ngIf="reviews.length === 0">Ancora nessuna recensione per questa ricetta.</p>
+</div>
 
   <!-- RICETTA NON TROVATA -->
   <div class="not-found" *ngIf="!loading && !recipe">

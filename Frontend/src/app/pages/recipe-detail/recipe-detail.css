@@ -253,3 +253,41 @@
   display: block;
   margin-top: 1rem;
 }
+.reviews-list {
+  background: #fff;
+  border: 0.5px solid #E8DDD0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.review-item {
+  padding: 16px;
+  border-bottom: 0.5px solid #F0EBE3;
+}
+
+.review-item:last-child {
+  border-bottom: none;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.review-author {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2C2C2A;
+}
+
+.review-stars {
+  font-size: 13px;
+}
+
+.review-comment {
+  font-size: 14px;
+  color: #555550;
+  line-height: 1.4;
+}
