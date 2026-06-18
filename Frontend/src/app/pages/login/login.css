@@ -42,6 +42,12 @@
   transform: translateX(-50%);
 }
 
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
 
 /* .logo {
   display: flex;
