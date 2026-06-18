@@ -71,11 +71,25 @@ export class RecipesComponent implements OnInit {
     this.loadRecipes();
   }
 
+  // get filteredRecipes() {
+  //   if (this.selectedTags.length === 0) return this.recipes;
+  //   return this.recipes.filter(r =>
+  //     this.selectedTags.some(tag => r.category === tag)
+  //   );
+  // }
+
   get filteredRecipes() {
-    if (this.selectedTags.length === 0) return this.recipes;
-    return this.recipes.filter(r =>
-      this.selectedTags.some(tag => r.category === tag)
-    );
+    return this.recipes.filter(r => {
+      // 1. Filtro per Tag (se ci sono tag selezionati, la ricetta deve corrispondere)
+      const matchesTag = this.selectedTags.length === 0 || this.selectedTags.includes(r.category);
+
+      // 2. Filtro per Nome dello Chef (case-insensitive, controlla se include il testo cercato)
+      const chefName = r.user?.username || '';
+      const matchesChef = chefName.toLowerCase().includes(this.searchUsername.toLowerCase());
+
+      // La ricetta deve superare entrambi i filtri
+      return matchesTag && matchesChef;
+    });
   }
 
   getStars(rating: number): string {
