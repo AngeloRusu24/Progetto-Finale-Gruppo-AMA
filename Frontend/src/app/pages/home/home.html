@@ -2,27 +2,44 @@
 
   <!-- NAVBAR -->
   <nav class="navbar">
-    <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
-    <span class="logo-text">La Ricetta Perfetta</span>
+    <img src="/LOGO.png" alt="La Ricetta Perfetta" class="logo" />
     <div class="nav-links">
-      <!-- routerLink per navigare senza ricaricare la pagina -->
       <a class="nav-link" routerLink="/recipes">Ricette</a>
       <a class="nav-link" routerLink="/profile">Profilo</a>
-      <a class="btn-primary" routerLink="/login">Accedi</a>
+
+      <!-- se non loggato mostra il bottone accedi -->
+      <button class="btn-primary" *ngIf="!user" routerLink="/login">Accedi</button>
+
+      <!-- se loggato mostra avatar con dropdown -->
+      <div class="avatar-wrap" *ngIf="user">
+        <div class="avatar" (click)="toggleMenu()">{{ initials }}</div>
+
+        <!-- dropdown menu -->
+        <div class="dropdown" *ngIf="showMenu">
+          <div class="dropdown-header">
+            <p class="dropdown-name">{{ user.username }}</p>
+            <p class="dropdown-email">{{ user.email }}</p>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" routerLink="/profile" (click)="showMenu = false">👤 Il mio profilo</a>
+          <a class="dropdown-item" routerLink="/recipes/new" (click)="showMenu = false">➕ Nuova ricetta</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item dropdown-item--danger" (click)="logout()">🚪 Esci</button>
+        </div>
+      </div>
     </div>
   </nav>
 
   <!-- HERO -->
   <div class="hero">
-    <p class="hero-tag">Benvenuto su La Ricetta Perfetta</p>
+    <p class="hero-tag">🍳 Benvenuto su La Ricetta Perfetta</p>
     <h1 class="hero-title">Cucina, condividi e scopri ricette dal mondo</h1>
     <p class="hero-sub">
       Una piattaforma per condividere le tue ricette preferite, scoprire quelle degli altri chef e lasciare recensioni.
     </p>
-    <!-- bottoni di chiamata all'azione -->
     <div class="hero-actions">
       <button class="btn-primary" routerLink="/recipes">Esplora le ricette</button>
-      <button class="btn-secondary" routerLink="/register">Registrati gratis</button>
+      <button class="btn-secondary" routerLink="/register" *ngIf="!user">Registrati gratis</button>
     </div>
   </div>
 

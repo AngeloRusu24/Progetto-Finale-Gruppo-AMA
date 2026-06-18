@@ -3,12 +3,29 @@
   <!-- NAVBAR -->
   <nav class="navbar">
     <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
-    <span class="logo-text">La Ricetta Perfetta</span>
     <div class="nav-links">
       <a class="nav-link" routerLink="/">Home</a>
       <a class="nav-link nav-link--active" routerLink="/recipes">Ricette</a>
       <a class="nav-link" routerLink="/profile">Profilo</a>
-    <a class="btn-primary" routerLink="/login">Accedi</a>
+
+      <!-- se non loggato mostra il bottone accedi -->
+      <button class="btn-primary" *ngIf="!user" routerLink="/login">Accedi</button>
+
+      <!-- se loggato mostra avatar con dropdown -->
+      <div class="avatar-wrap" *ngIf="user">
+        <div class="avatar" (click)="toggleMenu()">{{ initials }}</div>
+        <div class="dropdown" *ngIf="showMenu">
+          <div class="dropdown-header">
+            <p class="dropdown-name">{{ user.username }}</p>
+            <p class="dropdown-email">{{ user.email }}</p>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" routerLink="/profile" (click)="showMenu = false">👤 Il mio profilo</a>
+          <a class="dropdown-item" routerLink="/recipes/new" (click)="showMenu = false">➕ Nuova ricetta</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item dropdown-item--danger" (click)="logout()">🚪 Esci</button>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -51,17 +68,13 @@
 
     <!-- GRIGLIA RICETTE -->
     <div class="grid" *ngIf="!loading && filteredRecipes.length > 0">
-      <!-- ogni card è cliccabile e porta al dettaglio tramite _id di MongoDB -->
       <div class="card" *ngFor="let r of filteredRecipes" [routerLink]="['/recipe', r._id]">
-        <div class="card-img">
-          {{ r.emoji }}
-        </div>
+        <div class="card-img">{{ r.emoji }}</div>
         <div class="card-body">
           <p class="card-title">{{ r.title }}</p>
           <p class="card-meta">da {{ r.user?.username }}</p>
           <div class="card-footer">
             <span class="tag">{{ r.category }}</span>
-            <!-- valutazione media se presente -->
             <span class="stars" *ngIf="r.review_count > 0">
               {{ getStars(r.avg_rating) }} ({{ r.review_count }})
             </span>

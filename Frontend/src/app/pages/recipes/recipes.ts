@@ -13,6 +13,8 @@ export class RecipesComponent implements OnInit {
 
   constructor(private router: Router, private cdr: ChangeDetectorRef) {}
 
+  user: any = null;
+  showMenu = false;
   tags = ['Antipasti', 'Primi', 'Secondi', 'Dolci', 'Pasta', 'Carne', 'Pesce', 'Vegani'];
   selectedTags: string[] = [];
   searchUsername = '';
@@ -20,7 +22,26 @@ export class RecipesComponent implements OnInit {
   loading = true;
 
   ngOnInit() {
+    const stored = localStorage.getItem('user');
+    if (stored) this.user = JSON.parse(stored);
     this.loadRecipes();
+  }
+
+  get initials(): string {
+    if (!this.user?.username) return '?';
+    return this.user.username.split(' ').map((n: string) => n[0]).join('').toUpperCase();
+  }
+
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.user = null;
+    this.showMenu = false;
+    this.router.navigate(['/']);
   }
 
   async loadRecipes() {
