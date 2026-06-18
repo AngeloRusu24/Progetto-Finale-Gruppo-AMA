@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -11,9 +11,8 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class Login {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private cdr: ChangeDetectorRef) {}
 
-  // messaggio di errore da mostrare all'utente
   errorMessage = '';
   loading = false;
 
@@ -48,17 +47,15 @@ export class Login {
         return;
       }
 
-      // salva il token e i dati utente nel localStorage
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-
-      // reindirizza al profilo
       this.router.navigate(['/profile']);
 
     } catch (err) {
       this.errorMessage = 'Errore di connessione al server';
     } finally {
       this.loading = false;
+      this.cdr.detectChanges();
     }
   }
 }
