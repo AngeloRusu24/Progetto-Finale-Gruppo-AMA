@@ -96,3 +96,19 @@ export const remove = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Errore nell\'eliminazione della ricetta' });
   }
 };
+
+export const getByUser = async (req: Request, res: Response) => {
+  try {
+    const recipes = await Recipe.find({ user: req.params.userId }).sort({ createdAt: -1 });
+    const recipesWithRating = await Promise.all(recipes.map(async (r) => {
+      const reviews = await Review.find({ recipe: r._id });
+      const avg = reviews.length > 0
+        ? reviews.reduce((sum, rv) => sum + rv.rating, 0) / reviews.length
+        : null;
+      return { ...r.toObject(), avg_rating: avg ? avg.toFixed(1) : null, review_count: reviews.length };
+    }));
+    res.json(recipesWithRating);
+  } catch (err) {
+    res.status(500).json({ message: 'Errore nel recupero delle ricette' });
+  }
+};

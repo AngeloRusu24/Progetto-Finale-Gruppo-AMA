@@ -53,3 +53,14 @@ export const remove = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Errore nell\'eliminazione della recensione' });
   }
 };
+
+export const getByUser = async (req: Request, res: Response) => {
+  try {
+    const reviews = await Review.find({ user: req.params.userId })
+      .populate('user', 'username')
+      .populate('recipe', 'title');
+    res.json(reviews);
+  } catch (err) {
+    res.status(500).json({ message: 'Errore nel recupero recensioni' });
+  }
+};

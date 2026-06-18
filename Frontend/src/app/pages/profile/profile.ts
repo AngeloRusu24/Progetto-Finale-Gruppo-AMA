@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -11,44 +11,83 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
-  // dati utente dal localStorage
+  // utente loggato (da localStorage)
+  loggedUser: any = null;
+
+  // utente di cui stiamo guardando il profilo (può essere se stesso o un altro)
   user: any = null;
 
-  // ricette dell'utente caricate dall'API
+  // true se sto guardando il mio profilo, false se è quello di un altro utente
+  isOwnProfile = true;
+
+  // ricette dell'utente mostrato
   myRecipes: any[] = [];
 
-  // recensioni ricevute sulle ricette dell'utente
+  // recensioni ricevute sulle ricette dell'utente mostrato (solo se profilo altrui)
   comments: any[] = [];
 
   loading = true;
 
   ngOnInit() {
-    // recupera utente salvato al login
     const stored = localStorage.getItem('user');
-    if (!stored) {
-      // se non loggato, reindirizza al login
-      this.router.navigate(['/login']);
-      return;
+    this.loggedUser = stored ? JSON.parse(stored) : null;
+
+    const routeId = this.route.snapshot.paramMap.get('id');
+
+    if (!routeId) {
+      // nessun id in rotta -> profilo proprio
+      if (!this.loggedUser) {
+        this.router.navigate(['/login']);
+        return;
+      }
+      this.isOwnProfile = true;
+      this.user = this.loggedUser;
+      this.loadOwnData();
+    } else {
+      // id in rotta -> profilo di un utente specifico
+      this.isOwnProfile = !!this.loggedUser && (this.loggedUser.id === routeId);
+      if (this.isOwnProfile) {
+        this.user = this.loggedUser;
+        this.loadOwnData();
+      } else {
+        this.loadOtherUserData(routeId);
+      }
     }
-    this.user = JSON.parse(stored);
-    this.loadData();
   }
 
-  async loadData() {
+  async loadOwnData() {
     const token = localStorage.getItem('token');
     try {
-      // carica le mie ricette e le recensioni in parallelo
-      const [recipesRes, reviewsRes] = await Promise.all([
-        fetch('http://localhost:3000/api/recipes/mine', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }),
-        fetch('http://localhost:3000/api/reviews/mine', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        })
+      const recipesRes = await fetch('http://localhost:3000/api/recipes/mine', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      this.myRecipes = await recipesRes.json();
+    } catch (err) {
+      console.error('Errore nel caricamento del profilo', err);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async loadOtherUserData(userId: string) {
+    try {
+      const [userRes, recipesRes, reviewsRes] = await Promise.all([
+        fetch(`http://localhost:3000/api/auth/users/${userId}`),
+        fetch(`http://localhost:3000/api/recipes/user/${userId}`),
+        fetch(`http://localhost:3000/api/reviews/user/${userId}`)
       ]);
 
+      if (!userRes.ok) {
+        this.user = null;
+        return;
+      }
+
+      this.user = await userRes.json();
       this.myRecipes = await recipesRes.json();
       this.comments = await reviewsRes.json();
     } catch (err) {
@@ -61,19 +100,19 @@ export class ProfileComponent implements OnInit {
   // media valutazioni
   get avgRating(): string {
     if (this.myRecipes.length === 0) return '0';
-    const avg = this.myRecipes.reduce((sum: number, r: any) => sum + (r.avg_rating || 0), 0) / this.myRecipes.length;
+    const avg = this.myRecipes.reduce((sum: number, r: any) => sum + (Number(r.avg_rating) || 0), 0) / this.myRecipes.length;
     return avg.toFixed(1);
   }
 
   // migliori 2 ricette per rating
   get bestRecipes() {
     return [...this.myRecipes]
-      .sort((a, b) => (b.avg_rating || 0) - (a.avg_rating || 0))
+      .sort((a, b) => (Number(b.avg_rating) || 0) - (Number(a.avg_rating) || 0))
       .slice(0, 2);
   }
 
   getStars(rating: number): string {
-    const full = Math.round(rating);
+    const full = Math.round(rating || 0);
     return '★'.repeat(full) + '☆'.repeat(5 - full);
   }
 

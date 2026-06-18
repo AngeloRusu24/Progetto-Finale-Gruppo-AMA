@@ -2,34 +2,41 @@
 
   <!-- NAVBAR -->
   <nav class="navbar">
-<a routerLink="/" class="logo-link">
-  <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
-</a>
-    <span class="logo-text">La Ricetta Perfetta</span>
-    <div class="nav-links">
-      <a class="nav-link" href="#">Esplora</a>
-      <a class="nav-link" routerLink="/recipes">Ricette</a>
-      <a class="nav-link nav-link--active" routerLink="/profile">Profilo</a>
-     <a class="btn-primary" routerLink="/login">Accedi</a>
-    </div>
-  </nav>
+  <a routerLink="/" class="logo-link">
+    <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
+  </a>
+  <span class="logo-text">La Ricetta Perfetta</span>
+  <div class="nav-links">
+    <a class="nav-link" routerLink="/">Esplora</a>
+    <a class="nav-link" routerLink="/recipes">Ricette</a>
+    <a class="nav-link nav-link--active" routerLink="/profile">Profilo</a>
+    <ng-container *ngIf="loggedUser; else notLogged">
+      <a class="btn-primary" routerLink="/profile">{{ loggedUser.username }}</a>
+    </ng-container>
+    <ng-template #notLogged>
+      <a class="btn-primary" routerLink="/login">Accedi</a>
+    </ng-template>
+  </div>
+</nav>
 
-  <div class="content">
+  <p class="loading" *ngIf="loading">Caricamento...</p>
+
+  <div class="content" *ngIf="!loading && user">
 
     <!-- HERO PROFILO -->
     <div class="profile-hero">
       <div class="profile-left">
-        <div class="avatar">{{ user.initials }}</div>
+        <div class="avatar">{{ initials }}</div>
         <div class="profile-text">
-          <h1 class="profile-name">{{ user.name }}</h1>
-          <p class="profile-meta">Iscritta da {{ user.createdAt }} · {{ user.email }}</p>
+          <h1 class="profile-name">{{ user.username }}</h1>
+          <p class="profile-meta">{{ user.email }}</p>
         </div>
       </div>
-      <div class="profile-actions">
+      <div class="profile-actions" *ngIf="isOwnProfile">
         <button class="btn-outline">
           <span class="btn-icon"></span> Modifica
         </button>
-        <button class="btn-outline btn-icon-only" aria-label="Impostazioni">⚙️</button>
+        <button class="btn-outline btn-icon-only" aria-label="Impostazioni" (click)="logout()">🚪</button>
       </div>
     </div>
 
@@ -43,14 +50,14 @@
         <p class="stat-num">{{ avgRating }}</p>
         <p class="stat-label">Rating medio</p>
       </div>
-      <div class="stat-card">
+      <div class="stat-card" *ngIf="!isOwnProfile">
         <p class="stat-num">{{ comments.length }}</p>
         <p class="stat-label">Commenti ricevuti</p>
       </div>
     </div>
 
     <!-- MIGLIORI RICETTE -->
-    <section class="section">
+    <section class="section" *ngIf="bestRecipes.length > 0">
       <div class="section-header">
         <h2 class="section-title">Migliori ricette</h2>
       </div>
@@ -58,59 +65,71 @@
         <div
           class="best-card"
           *ngFor="let r of bestRecipes; let i = index"
-          [class.best-card--first]="i === 0">
+          [class.best-card--first]="i === 0"
+          [routerLink]="['/recipe', r._id]">
           <p class="best-rank">N° {{ i + 1 }}</p>
           <p class="best-title">{{ r.title }}</p>
-          <span class="best-rating">⭐ {{ r.rating }}</span>
+          <span class="best-rating">⭐ {{ r.avg_rating || 'N/D' }}</span>
           <span class="best-emoji" aria-hidden="true">{{ r.emoji }}</span>
         </div>
       </div>
     </section>
 
-    <!-- LE MIE RICETTE -->
+    <!-- RICETTE -->
     <section class="section">
       <div class="section-header">
-        <h2 class="section-title">Le mie ricette</h2>
-        <a class="section-link" routerLink="/recipes/new">Aggiungi nuova →</a>
+        <h2 class="section-title">{{ isOwnProfile ? 'Le mie ricette' : 'Ricette di ' + user.username }}</h2>
+        <a class="section-link" *ngIf="isOwnProfile" routerLink="/recipes/new">Aggiungi nuova →</a>
       </div>
-      <div class="recipes-list">
-        <div class="recipe-row" *ngFor="let r of myRecipes">
+      <div class="recipes-list" *ngIf="myRecipes.length > 0">
+        <div class="recipe-row" *ngFor="let r of myRecipes" [routerLink]="['/recipe', r._id]">
           <div class="recipe-row-left">
             <div class="recipe-dot" aria-hidden="true">{{ r.emoji }}</div>
             <div>
               <p class="recipe-name">{{ r.title }}</p>
-              <p class="recipe-sub">{{ r.category }} · {{ r.time }} min · {{ r.difficulty }}</p>
+              <p class="recipe-sub">{{ r.category }}</p>
             </div>
           </div>
           <div class="recipe-row-right">
             <span class="badge">{{ r.category }}</span>
-            <span class="recipe-rating">⭐ {{ r.rating }}</span>
+            <span class="recipe-rating">⭐ {{ r.avg_rating || 'N/D' }}</span>
           </div>
         </div>
       </div>
+      <p class="empty" *ngIf="myRecipes.length === 0">
+        {{ isOwnProfile ? 'Non hai ancora pubblicato ricette.' : 'Questo utente non ha ancora pubblicato ricette.' }}
+      </p>
     </section>
 
-    <!-- COMMENTI RICEVUTI -->
-    <section class="section">
+    <!-- COMMENTI RICEVUTI: solo quando si guarda il profilo di un altro utente -->
+    <section class="section" *ngIf="!isOwnProfile">
       <div class="section-header">
         <h2 class="section-title">Commenti ricevuti</h2>
       </div>
-      <div class="comments-list">
+      <div class="comments-list" *ngIf="comments.length > 0">
         <div class="comment-row" *ngFor="let c of comments">
           <div class="comment-top">
             <div class="comment-user-wrap">
-              <div class="comment-avatar">{{ c.initials }}</div>
+              <div class="comment-avatar">{{ c.user?.username?.charAt(0)?.toUpperCase() }}</div>
               <div>
-                <p class="comment-username">{{ c.user }}</p>
-                <p class="comment-recipe">su {{ c.recipeTitle }}</p>
+                <p class="comment-username">{{ c.user?.username }}</p>
+                <p class="comment-recipe">su {{ c.recipe?.title }}</p>
               </div>
             </div>
             <span class="comment-stars">{{ getStars(c.rating) }}</span>
           </div>
-          <p class="comment-text">{{ c.text }}</p>
+          <p class="comment-text">{{ c.comment }}</p>
         </div>
       </div>
+      <p class="empty" *ngIf="comments.length === 0">Nessun commento ricevuto ancora.</p>
     </section>
 
   </div>
+
+  <!-- UTENTE NON TROVATO -->
+  <div class="not-found" *ngIf="!loading && !user">
+    <p>Utente non trovato.</p>
+    <a routerLink="/">Torna alla home</a>
+  </div>
+
 </div>

@@ -34,3 +34,13 @@ export const login = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Errore durante il login' });
   }
 };
+
+export const getUserById = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.params.id).select('-password');
+    if (!user) return res.status(404).json({ message: 'Utente non trovato' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: 'Errore nel recupero utente' });
+  }
+};
