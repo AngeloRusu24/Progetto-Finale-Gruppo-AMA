@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const recipeSchema = new mongoose.Schema({
   title:       { type: String, required: true },
   description: { type: String },
+  steps:       { type: String },
   category:    { type: String },
   emoji:       { type: String },
   user:        { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },

@@ -363,4 +363,11 @@ textarea.input {
   .nav-links {
     gap: 1rem;
   }
+
+  .steps-text {
+  font-size: 14px;
+  color: #5F5E5A;
+  line-height: 1.8;
+  white-space: pre-line;
+}
 }

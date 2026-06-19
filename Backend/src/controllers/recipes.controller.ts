@@ -69,9 +69,9 @@ export const getMine = async (req: Request, res: Response) => {
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const { title, description, category, emoji } = req.body;
+    const { title, description, steps, category, emoji } = req.body;
     const userId = (req as any).userId;
-    const recipe = await Recipe.create({ title, description, category, emoji, user: userId });
+    const recipe = await Recipe.create({ title, description, steps, category, emoji, user: userId });
     res.status(201).json(recipe);
   } catch (err) {
     res.status(500).json({ message: 'Errore nella creazione della ricetta' });

@@ -80,6 +80,7 @@ export class AddRecipeComponent {
         body: JSON.stringify({
           title: this.form.title,
           description: this.form.description,
+          steps: this.form.steps,
           category: this.form.tags[0],
           emoji: this.form.emoji,
         })

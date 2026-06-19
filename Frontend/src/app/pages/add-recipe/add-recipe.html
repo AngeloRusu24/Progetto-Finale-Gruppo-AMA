@@ -1,15 +1,15 @@
 <div class="page">
   <nav class="navbar">
-  <a routerLink="/" class="logo-link">
-  <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
-  <span class="logo-text">La Ricetta Perfetta</span>
-</a>
+    <a routerLink="/" class="logo-link">
+      <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
+      <span class="logo-text">La Ricetta Perfetta</span>
+    </a>
 
     <div class="nav-links">
-      <a class="nav-link" href="#">Esplora</a>
-      <a class="nav-link" href="#">Ricette</a>
-      <a class="nav-link" href="#">Profilo</a>
-<a class="btn-primary" routerLink="/login">Accedi</a>
+      <a class="nav-link" routerLink="/">Home</a>
+      <a class="nav-link" routerLink="/recipes">Ricette</a>
+      <a class="nav-link" routerLink="/profile">Profilo</a>
+      <a class="btn-primary" routerLink="/login">Accedi</a>
     </div>
   </nav>
 
@@ -72,13 +72,11 @@
       <p class="form-section-title">Emoji del piatto</p>
       <p class="field-hint">Seleziona un'emoji che rappresenta la tua ricetta</p>
 
-      <!-- anteprima emoji selezionata -->
       <div class="emoji-preview">
         <span class="emoji-selected">{{ form.emoji }}</span>
         <span class="emoji-selected-label">Emoji selezionata</span>
       </div>
 
-      <!-- griglia di emoji cliccabili -->
       <div class="emoji-grid">
         <span
           class="emoji-option"
@@ -108,6 +106,7 @@
     <!-- INGREDIENTI E PROCEDIMENTO -->
     <div class="form-section">
       <p class="form-section-title">Ingredienti e procedimento</p>
+
       <div class="field">
         <label class="label" for="ingredients">Ingredienti</label>
         <textarea
@@ -118,6 +117,7 @@
           name="ingredients">
         </textarea>
       </div>
+
       <div class="field">
         <label class="label" for="steps">Procedimento</label>
         <textarea

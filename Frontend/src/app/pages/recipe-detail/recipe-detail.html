@@ -2,12 +2,10 @@
   <!-- NAVBAR -->
   <nav class="navbar">
     <a routerLink="/" class="logo-link">
-  <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
-  <span class="logo-text">La Ricetta Perfetta</span>
-</a>
-
+      <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
+      <span class="logo-text">La Ricetta Perfetta</span>
+    </a>
     <div class="nav-links">
-      <!-- torna alla home -->
       <a class="nav-link" routerLink="/">← Torna alla home</a>
     </div>
   </nav>
@@ -22,18 +20,15 @@
 
     <!-- SCHEDA RICETTA -->
     <div class="recipe-card">
-      <!-- Emoji e titolo -->
       <div class="recipe-hero" [style.background]="'#FFF3EC'">
         <span class="recipe-emoji">{{ recipe.emoji }}</span>
       </div>
       <div class="recipe-info">
         <div class="recipe-header">
           <h1 class="recipe-title">{{ recipe.title }}</h1>
-          <!-- badge categoria -->
           <span class="badge">{{ recipe.category }}</span>
         </div>
         <p class="recipe-description">{{ recipe.description }}</p>
-        <!-- valutazione media -->
         <div class="rating" *ngIf="recipe.review_count > 0">
           <span>{{ getStars(recipe.avg_rating) }}</span>
           <span class="rating-text">{{ recipe.avg_rating }} / 5 ({{ recipe.review_count }} recensioni)</span>
@@ -46,7 +41,6 @@
     <div class="section">
       <h2 class="section-title">👨‍🍳 Chef</h2>
       <div class="author-card" [routerLink]="['/profile', recipe.user?._id]" style="cursor:pointer">
-        <!-- user è ora un oggetto con _id e username -->
         <div class="author-avatar">{{ recipe.user?.username?.charAt(0)?.toUpperCase() }}</div>
         <p class="author-name">{{ recipe.user?.username }}</p>
       </div>
@@ -64,40 +58,49 @@
       <p class="empty" *ngIf="ingredients.length === 0">Nessun ingrediente inserito</p>
     </div>
 
-    <!-- RECENSIONI -->
+    <!-- PROCEDIMENTO -->
+    <div class="section">
+      <h2 class="section-title">👨‍🍳 Procedimento</h2>
+      <p class="steps-text" *ngIf="recipe.steps">{{ recipe.steps }}</p>
+      <p class="empty" *ngIf="!recipe.steps">Nessun procedimento inserito</p>
+    </div>
+
     <!-- FORM RECENSIONE -->
-<div class="section" *ngIf="loggedUser && !isOwner">
-  <h2 class="section-title">✍️ Lascia una recensione</h2>
-  <div class="review-form">
-    <div class="rating-select">
-      <label>Voto: </label>
-      <select [(ngModel)]="newRating">
-        <option [value]="5">⭐⭐⭐⭐⭐</option>
-        <option [value]="4">⭐⭐⭐⭐</option>
-        <option [value]="3">⭐⭐⭐</option>
-        <option [value]="2">⭐⭐</option>
-        <option [value]="1">⭐</option>
-      </select>
-    </div>
-    <textarea [(ngModel)]="newComment" placeholder="Scrivi un commento..." rows="3"></textarea>
-    <p style="color:red" *ngIf="submitError">{{ submitError }}</p>
-    <button class="btn-primary" (click)="submitReview()">Invia recensione</button>
-  </div>
-</div>
-<!-- LISTA RECENSIONI -->
-<div class="section">
-  <h2 class="section-title">💬 Recensioni</h2>
-  <div class="reviews-list" *ngIf="reviews.length > 0">
-    <div class="review-item" *ngFor="let rev of reviews">
-      <div class="review-header">
-        <span class="review-author">{{ rev.user?.username }}</span>
-        <span class="review-stars">{{ getStars(rev.rating) }}</span>
+    <div class="section" *ngIf="loggedUser && !isOwner">
+      <h2 class="section-title">✍️ Lascia una recensione</h2>
+      <div class="review-form">
+        <div class="rating-select">
+          <label>Voto: </label>
+          <select [(ngModel)]="newRating">
+            <option [value]="5">⭐⭐⭐⭐⭐</option>
+            <option [value]="4">⭐⭐⭐⭐</option>
+            <option [value]="3">⭐⭐⭐</option>
+            <option [value]="2">⭐⭐</option>
+            <option [value]="1">⭐</option>
+          </select>
+        </div>
+        <textarea [(ngModel)]="newComment" placeholder="Scrivi un commento..." rows="3"></textarea>
+        <p style="color:red" *ngIf="submitError">{{ submitError }}</p>
+        <button class="btn-primary" (click)="submitReview()">Invia recensione</button>
       </div>
-      <p class="review-comment">{{ rev.comment }}</p>
     </div>
+
+    <!-- LISTA RECENSIONI -->
+    <div class="section">
+      <h2 class="section-title">💬 Recensioni</h2>
+      <div class="reviews-list" *ngIf="reviews.length > 0">
+        <div class="review-item" *ngFor="let rev of reviews">
+          <div class="review-header">
+            <span class="review-author">{{ rev.user?.username }}</span>
+            <span class="review-stars">{{ getStars(rev.rating) }}</span>
+          </div>
+          <p class="review-comment">{{ rev.comment }}</p>
+        </div>
+      </div>
+      <p class="empty" *ngIf="reviews.length === 0">Ancora nessuna recensione per questa ricetta.</p>
+    </div>
+
   </div>
-  <p class="empty" *ngIf="reviews.length === 0">Ancora nessuna recensione per questa ricetta.</p>
-</div>
 
   <!-- RICETTA NON TROVATA -->
   <div class="not-found" *ngIf="!loading && !recipe">
