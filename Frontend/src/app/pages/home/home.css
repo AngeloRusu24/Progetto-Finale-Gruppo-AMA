@@ -4,10 +4,28 @@
   padding: 0;
 }
 
-.page {
+/* .page {
   background: #FFFDF9;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
+} */
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 253, 249, 0.7),
+      rgba(255, 253, 249, 0.7)
+    ),
+    url('/piatticucina.jpg');
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 /* NAVBAR */
