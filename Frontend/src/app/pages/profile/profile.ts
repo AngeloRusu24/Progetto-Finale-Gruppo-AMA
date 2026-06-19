@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
+
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -53,19 +54,28 @@ export class ProfileComponent implements OnInit {
   }
 
   async loadOwnData() {
-    const token = localStorage.getItem('token');
-    try {
-      const recipesRes = await fetch('http://localhost:3000/api/recipes/mine', {
+  const token = localStorage.getItem('token');
+  try {
+    const [userRes, recipesRes] = await Promise.all([
+      fetch(`http://localhost:3000/api/auth/users/${this.loggedUser.id}`),
+      fetch('http://localhost:3000/api/recipes/mine', {
         headers: { 'Authorization': `Bearer ${token}` }
-      });
-      this.myRecipes = await recipesRes.json();
-    } catch (err) {
-      console.error('Errore nel caricamento del profilo', err);
-    } finally {
-      this.loading = false;
-      this.cdr.detectChanges();
-    }
+      })
+    ]);
+
+    this.user = await userRes.json();
+    this.myRecipes = await recipesRes.json();
+
+    // aggiorna anche il localStorage con i dati freschi
+    const updatedUser = { ...this.loggedUser, ...this.user, id: this.user._id };
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+  } catch (err) {
+    console.error('Errore nel caricamento del profilo', err);
+  } finally {
+    this.loading = false;
+    this.cdr.detectChanges();
   }
+}
 
   async loadOtherUserData(userId: string) {
     try {

@@ -6,10 +6,12 @@ import { RecipesComponent } from './pages/recipes/recipes';
 import { Login } from './pages/login/login';
 import { AddRecipeComponent } from './pages/add-recipe/add-recipe';
 import { RecipeDetail } from './pages/recipe-detail/recipe-detail';
+import { EditProfile } from './pages/edit-profile/edit-profile';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'profile/edit', component: EditProfile, canActivate: [authGuard] },
   { path: 'profile/:id', component: ProfileComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'recipes', component: RecipesComponent },

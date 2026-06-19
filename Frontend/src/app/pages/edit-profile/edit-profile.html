@@ -1,0 +1,85 @@
+<div class="page">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a routerLink="/" class="logo-link">
+      <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
+      <span class="logo-text">La Ricetta Perfetta</span>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" routerLink="/">Home</a>
+      <a class="nav-link" routerLink="/recipes">Ricette</a>
+      <a class="nav-link" routerLink="/profile">Profilo</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <a class="back-link" (click)="onCancel()">← Torna al profilo</a>
+    <h1 class="page-title">Modifica profilo</h1>
+
+    <!-- INFO PROFILO -->
+    <div class="form-section">
+      <p class="form-section-title">Informazioni personali</p>
+
+      <div class="field">
+        <label class="label" for="username">Nome utente</label>
+        <input
+          id="username"
+          class="input"
+          type="text"
+          placeholder="Il tuo nome utente"
+          [(ngModel)]="form.username"
+          name="username" />
+      </div>
+
+      <div class="field">
+        <label class="label" for="bio">Biografia</label>
+        <textarea
+          id="bio"
+          class="input"
+          placeholder="Racconta qualcosa di te, le tue passioni in cucina..."
+          [(ngModel)]="form.bio"
+          name="bio"
+          maxlength="200">
+        </textarea>
+        <p class="field-hint">{{ form.bio.length }}/200 caratteri</p>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label class="label" for="birthDate">Data di nascita</label>
+          <input
+            id="birthDate"
+            class="input"
+            type="date"
+            [(ngModel)]="form.birthDate"
+            name="birthDate" />
+        </div>
+        <div class="field">
+          <label class="label" for="location">Città</label>
+          <input
+            id="location"
+            class="input"
+            type="text"
+            placeholder="Es. Roma"
+            [(ngModel)]="form.location"
+            name="location" />
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGGIO ERRORE -->
+    <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <!-- FOOTER -->
+    <div class="form-footer">
+      <button class="btn-cancel" (click)="onCancel()">Annulla</button>
+      <button
+        class="btn-submit"
+        (click)="onSubmit()"
+        [disabled]="loading">
+        {{ loading ? 'Salvataggio...' : 'Salva modifiche' }}
+      </button>
+    </div>
+  </div>
+</div>
