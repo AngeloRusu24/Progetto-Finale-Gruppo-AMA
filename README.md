@@ -1,4 +1,3 @@
-# Progetto-Finale-Gruppo-AMA
 # La Ricetta Perfetta 🍝
 
 Progetto Finale - Gruppo AMA
@@ -80,14 +79,16 @@ Progetto-Finale-Gruppo-AMA/
 │       └── seed.ts       # popolamento dati di prova
 │
 └── Frontend/              # Interfaccia utente (Angular)
-    └── src/app/pages/    # pagine dell'applicazione
-        ├── home/
-        ├── recipes/
-        ├── recipe-detail/
-        ├── add-recipe/
-        ├── login/
-        ├── register/
-        └── profile/
+    └── src/app/
+        ├── guards/           # protezione delle rotte (authGuard)
+        └── pages/            # pagine dell'applicazione
+            ├── home/
+            ├── recipes/
+            ├── recipe-detail/
+            ├── add-recipe/
+            ├── login/
+            ├── register/
+            └── profile/
 ```
 
 ## 👨‍👩‍👦 Il team
@@ -98,4 +99,4 @@ Progetto realizzato dal **Gruppo AMA** 🧑‍🍳, tre persone, tre ruoli compl
 - 🎨 **Alessandro** — frontend e design dell'interfaccia
 - ⚙️ **Angelo** — backend (API, database, autenticazione), con un contributo anche sul frontend
 
-Un progetto nato dalla collaborazione e dalla voglia di mettere in pratica, tutti insieme, quanto imparato durante il percorso. 🚀
+Un progetto nato dalla collaborazione e dalla voglia di mettere in pratica, tutti insieme, quanto imparato durante il percorso. 
