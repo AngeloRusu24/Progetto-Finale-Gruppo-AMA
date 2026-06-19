@@ -15,7 +15,7 @@
 
   <div class="content">
     <a class="back-link" (click)="onCancel()">← Torna alle ricette</a>
-    <h1 class="page-title">Aggiungi una ricetta</h1>
+    <h1 class="page-title">{{ isEditMode ? 'Modifica ricetta' : 'Aggiungi una ricetta' }}</h1>
 
     <!-- INFO BASE -->
     <div class="form-section">
@@ -141,7 +141,7 @@
         (click)="onSubmit()"
         [disabled]="!isValid || loading"
         [class.disabled]="!isValid || loading">
-        {{ loading ? 'Pubblicazione...' : 'Pubblica ricetta' }}
+        {{ loading ? 'Salvataggio...' : (isEditMode ? 'Salva modifiche' : 'Pubblica ricetta') }}
       </button>
     </div>
   </div>

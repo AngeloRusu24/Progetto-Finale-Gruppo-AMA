@@ -17,22 +17,15 @@ export class ProfileComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
-  // utente loggato (da localStorage)
   loggedUser: any = null;
-
-  // utente di cui stiamo guardando il profilo (può essere se stesso o un altro)
   user: any = null;
-
-  // true se sto guardando il mio profilo, false se è quello di un altro utente
   isOwnProfile = true;
-
-  // ricette dell'utente mostrato
   myRecipes: any[] = [];
-
-  // recensioni ricevute sulle ricette dell'utente mostrato (solo se profilo altrui)
   comments: any[] = [];
-
   loading = true;
+
+  // id della ricetta il cui menu "..." è aperto, null se nessuno
+  openMenuId: string | null = null;
 
   ngOnInit() {
     const stored = localStorage.getItem('user');
@@ -41,7 +34,6 @@ export class ProfileComponent implements OnInit {
     const routeId = this.route.snapshot.paramMap.get('id');
 
     if (!routeId) {
-      // nessun id in rotta -> profilo proprio
       if (!this.loggedUser) {
         this.router.navigate(['/login']);
         return;
@@ -50,7 +42,6 @@ export class ProfileComponent implements OnInit {
       this.user = this.loggedUser;
       this.loadOwnData();
     } else {
-      // id in rotta -> profilo di un utente specifico
       this.isOwnProfile = !!this.loggedUser && (this.loggedUser.id === routeId);
       if (this.isOwnProfile) {
         this.user = this.loggedUser;
@@ -100,14 +91,55 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  // media valutazioni
+  // apre/chiude il menu "..." di una ricetta specifica
+  toggleRecipeMenu(recipeId: string, event: Event) {
+    event.stopPropagation();
+    this.openMenuId = this.openMenuId === recipeId ? null : recipeId;
+  }
+
+  // chiude qualsiasi menu aperto (usato cliccando altrove)
+  closeMenu() {
+    this.openMenuId = null;
+  }
+
+  editRecipe(recipeId: string, event: Event) {
+    event.stopPropagation();
+    this.openMenuId = null;
+    this.router.navigate(['/recipes/edit', recipeId]);
+  }
+
+  async deleteRecipe(recipeId: string, event: Event) {
+    event.stopPropagation();
+    this.openMenuId = null;
+
+    const confirmed = confirm('Sei sicuro di voler eliminare questa ricetta? L\'azione non è reversibile.');
+    if (!confirmed) return;
+
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`http://localhost:3000/api/recipes/${recipeId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        this.myRecipes = this.myRecipes.filter(r => r._id !== recipeId);
+        this.cdr.detectChanges();
+      } else {
+        alert('Errore durante l\'eliminazione della ricetta');
+      }
+    } catch (err) {
+      console.error('Errore eliminazione ricetta:', err);
+      alert('Errore di connessione al server');
+    }
+  }
+
   get avgRating(): string {
     if (this.myRecipes.length === 0) return '0';
     const avg = this.myRecipes.reduce((sum: number, r: any) => sum + (Number(r.avg_rating) || 0), 0) / this.myRecipes.length;
     return avg.toFixed(1);
   }
 
-  // migliori 2 ricette per rating
   get bestRecipes() {
     return [...this.myRecipes]
       .sort((a, b) => (Number(b.avg_rating) || 0) - (Number(a.avg_rating) || 0))
@@ -119,7 +151,6 @@ export class ProfileComponent implements OnInit {
     return '★'.repeat(full) + '☆'.repeat(5 - full);
   }
 
-  // iniziali dell'utente per l'avatar
   get initials(): string {
     if (!this.user?.username) return '?';
     return this.user.username.split(' ').map((n: string) => n[0]).join('').toUpperCase();

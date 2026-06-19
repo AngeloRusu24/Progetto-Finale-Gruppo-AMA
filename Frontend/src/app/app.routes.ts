@@ -14,6 +14,7 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'recipes', component: RecipesComponent },
   { path: 'recipes/new', component: AddRecipeComponent, canActivate: [authGuard] },
+  { path: 'recipes/edit/:id', component: AddRecipeComponent, canActivate: [authGuard] },
   { path: 'register', component: Register },
   { path: 'login', component: Login },
   { path: 'recipe/:id', component: RecipeDetail, canActivate: [authGuard] },

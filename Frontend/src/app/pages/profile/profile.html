@@ -1,24 +1,24 @@
-<div class="page">
+<div class="page" (click)="closeMenu()">
 
   <!-- NAVBAR -->
   <nav class="navbar">
-  <a routerLink="/" class="logo-link">
-    <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
-    <span class="logo-text">La Ricetta Perfetta</span>
-  </a>
+    <a routerLink="/" class="logo-link">
+      <img src="/LOGO.png" alt="La Ricetta perfetta" class="logo" />
+      <span class="logo-text">La Ricetta Perfetta</span>
+    </a>
 
-  <div class="nav-links">
-    <a class="nav-link" routerLink="/">Esplora</a>
-    <a class="nav-link" routerLink="/recipes">Ricette</a>
-    <a class="nav-link nav-link--active" routerLink="/profile">Profilo</a>
-    <ng-container *ngIf="loggedUser; else notLogged">
-      <a class="btn-primary" routerLink="/profile">{{ loggedUser.username }}</a>
-    </ng-container>
-    <ng-template #notLogged>
-      <a class="btn-primary" routerLink="/login">Accedi</a>
-    </ng-template>
-  </div>
-</nav>
+    <div class="nav-links">
+      <a class="nav-link" routerLink="/">Esplora</a>
+      <a class="nav-link" routerLink="/recipes">Ricette</a>
+      <a class="nav-link nav-link--active" routerLink="/profile">Profilo</a>
+      <ng-container *ngIf="loggedUser; else notLogged">
+        <a class="btn-primary" routerLink="/profile">{{ loggedUser.username }}</a>
+      </ng-container>
+      <ng-template #notLogged>
+        <a class="btn-primary" routerLink="/login">Accedi</a>
+      </ng-template>
+    </div>
+  </nav>
 
   <p class="loading" *ngIf="loading">Caricamento...</p>
 
@@ -94,6 +94,16 @@
           <div class="recipe-row-right">
             <span class="badge">{{ r.category }}</span>
             <span class="recipe-rating">⭐ {{ r.avg_rating || 'N/D' }}</span>
+
+            <!-- menu a 3 puntini, solo sul proprio profilo -->
+            <div class="recipe-menu-wrap" *ngIf="isOwnProfile">
+              <button class="btn-dots" (click)="toggleRecipeMenu(r._id, $event)">⋮</button>
+
+              <div class="recipe-dropdown" *ngIf="openMenuId === r._id" (click)="$event.stopPropagation()">
+                <button class="dropdown-item" (click)="editRecipe(r._id, $event)">✏️ Modifica</button>
+                <button class="dropdown-item dropdown-item--danger" (click)="deleteRecipe(r._id, $event)">🗑️ Elimina</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -102,7 +112,7 @@
       </p>
     </section>
 
-    <!-- COMMENTI RICEVUTI: solo quando si guarda il profilo di un altro utente -->
+    <!-- COMMENTI RICEVUTI -->
     <section class="section" *ngIf="!isOwnProfile">
       <div class="section-header">
         <h2 class="section-title">Commenti ricevuti</h2>

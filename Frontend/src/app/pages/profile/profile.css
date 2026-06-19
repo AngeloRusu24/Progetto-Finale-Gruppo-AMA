@@ -469,3 +469,63 @@
     gap: 1rem;
   }
 }
+
+/* MENU 3 PUNTINI */
+.recipe-menu-wrap {
+  position: relative;
+  margin-left: 8px;
+}
+
+.btn-dots {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #888780;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.btn-dots:hover {
+  background: #FFF3EC;
+  color: #2C2C2A;
+}
+
+.recipe-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: #fff;
+  border: 0.5px solid #E8DDD0;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  min-width: 150px;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #2C2C2A;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.dropdown-item:hover {
+  background: #FFFDF9;
+}
+
+.dropdown-item--danger {
+  color: #D85A30;
+}
+
+.dropdown-item--danger:hover {
+  background: #FAECE7;
+}
