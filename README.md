@@ -50,7 +50,7 @@ npm run dev
 # Frontend
 cd Frontend
 npm install
-npm start
+ng serve
 ```
 
 Il database è ospitato su **MongoDB Atlas** (cloud), quindi non è necessario installare nulla in locale: basta una connection string valida, da inserire in un file `.env` nella cartella `Backend` (es. `MONGODB_URI=...`).
